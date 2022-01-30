@@ -174,6 +174,7 @@ extension BottomSheetPresenter {
         }.onPreferenceChange(DismissDisabledPreferenceKey.self) { [self] preference in
           dismissDisabled = preference
         }
+        .selectedDetentIdentifier(self.viewController?.sheetPresentationController?.selectedDetentIdentifier)
     }
 
     private func resetItemBinding() {
@@ -187,6 +188,15 @@ extension BottomSheetPresenter {
     private func resetItemBindingAndHandleDismissal() {
       parent.item = nil
       parent.onDismiss?()
+    }
+
+    // MARK: UISheetPresentationControllerDelegate
+    func sheetPresentationControllerDidChangeSelectedDetentIdentifier(_ sheetPresentationController: UISheetPresentationController) {
+      guard let item = item else {
+        return
+      }
+
+      updateSheet(with: item)
     }
 
     // MARK: UIAdaptivePresentationControllerDelegate
