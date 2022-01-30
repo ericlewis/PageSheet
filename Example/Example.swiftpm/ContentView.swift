@@ -83,9 +83,17 @@ struct SheetContentView: View {
   @State
   private var widthFollowsPreferredContentSizeWhenEdgeAttached = false
 
+  @Environment(\.selectedDetentIdentifier)
+  private var selectedDetent
+
   var body: some View {
     NavigationView {
       List {
+        Section {
+          Text(selectedDetent?.rawValue ?? "nil")
+        } header: {
+          Text("Selected Detent Identifier")
+        }
         Section {
           Text(count, format: .number)
           Button("Increment") { count += 1 }
