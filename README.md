@@ -24,7 +24,7 @@ Select the `BottomSheetView` target and press `Add Package`.
 ### Swift Package Manager
 Add the following line to the `dependencies` in your `Package.swift` file:
 ```swift
-.package(url: "https://github.com/ericlewis/BottomSheetView.git", .upToNextMajor(from: "0.1.0"))
+.package(url: "https://github.com/ericlewis/BottomSheetView.git", .upToNextMajor(from: "0.2.0"))
 ```
 Next, add `BottomSheetView` as a dependency for your targets:
 ```swift
@@ -41,7 +41,7 @@ let package = Package(
     dependencies: [
         .package(
           url: "https://github.com/ericlewis/BottomSheetView.git", 
-          .upToNextMajor(from: "0.1.0"))
+          .upToNextMajor(from: "0.2.0"))
     ],
     targets: [
         .target(
@@ -123,6 +123,14 @@ struct ContentView: View {
 ```
 
 ## Documentation
+#### Environment
+You can access the current `selectedDetentIdentifier` property via the SwiftUI Environment property wrapper.
+```swift
+...
+@Environment(\.selectedDetentIdentifier)
+var selectedDetent
+```
+
 #### Presentation
 These are extensions on `View`.
 
