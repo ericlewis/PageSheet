@@ -1,5 +1,8 @@
 # BottomSheetView
 
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fericlewis%2FBottomSheetView%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/ericlewis/BottomSheetView)
+[![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fericlewis%2FBottomSheetView%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/ericlewis/BottomSheetView)
+
 Present sheets with [`UISheetPresentationController`](https://developer.apple.com/documentation/uikit/uisheetpresentationcontroller) in SwiftUI.
 
 ## Requirements
