@@ -1,12 +1,12 @@
 import SwiftUI
-import BottomSheetView
+import PageSheet
 
 struct ContentView: View {
   @State
-  private var sheetPresented = true
+  private var sheetPresented = false
 
   @State
-  private var externalSheetPresented = false
+  private var testSheetPresented = false
 
   @State
   private var count = 0
@@ -22,35 +22,11 @@ struct ContentView: View {
             sheetPresented = false
           }
         }
-        Section {
-          Button("Open External Sheet") {
-            externalSheetPresented = true
-          }
-          Button("Close External Sheet") {
-            externalSheetPresented = false
-          }
-        }
       }
-      .bottomSheet(isPresented: $sheetPresented) {
+      .pageSheet(isPresented: $sheetPresented) {
         SheetContentView()
       }
-      .bottomSheet(isPresented: $externalSheetPresented) {
-        NavigationView {
-          List {
-            Section {
-              Text(count, format: .number)
-              Button("Increment") { count += 1 }
-              Button("Decrement") { count -= 1 }
-            } header: {
-              Text("External State")
-            }
-          }
-          .detents([.medium()])
-          .navigationTitle("External")
-          .navigationBarTitleDisplayMode(.inline)
-        }
-      }
-      .navigationTitle("BottomSheetView")
+      .navigationTitle("PageSheet")
     }
   }
 }
@@ -147,13 +123,19 @@ struct SheetContentView: View {
       .navigationBarTitleDisplayMode(.inline)
       .detents(detents)
       .prefersGrabberVisible(grabberVisible)
-      .dismissDisabled(dismissDisabled)
-      .prefersScrollingExpandsWhenScrolledToEdge(prefersScrollingExpandsWhenScrolledToEdge)
-      .prefersEdgeAttachedInCompactHeight(prefersEdgeAttachedInCompactHeight)
-      .widthFollowsPreferredContentSizeWhenEdgeAttached(widthFollowsPreferredContentSizeWhenEdgeAttached)
+      .interactiveDismissDisabled(dismissDisabled)
       .selectedDetentIdentifier(selectedDetentId)
+      .preferredColorScheme(.dark)
+      .sheet(isPresented: .constant(true)) {
+        
+      }
+
+//      .prefersScrollingExpandsWhenScrolledToEdge(prefersScrollingExpandsWhenScrolledToEdge)
+//      .prefersEdgeAttachedInCompactHeight(prefersEdgeAttachedInCompactHeight)
+//      .widthFollowsPreferredContentSizeWhenEdgeAttached(widthFollowsPreferredContentSizeWhenEdgeAttached)
+//      .largestUndimmedDetentIdentifier(.medium)
     }
-    .bottomSheet(isPresented: $childPresented) {
+    .pageSheet(isPresented: $childPresented) {
       SheetContentView()
     }
   }
