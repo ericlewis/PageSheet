@@ -407,6 +407,8 @@ extension View {
   /// Set this value to `true` for the system to draw a grabber in the standard system-defined location.
   /// The system automatically hides the grabber at appropriate times, like when the sheet is full screen in a compact-height size class or when another sheet presents on top of it.
   ///
+  /// - Note: This modifier only takes effect when this view is inside of and visible within a presented ``PageSheet``. You can apply the modifier to any view in the sheet’s view hierarchy.
+  ///
   /// - Parameters:
   ///   - isVisible: Default value is `false`, set to `true` to display grabber.
   /// - Returns: A view that wraps this view and sets the presenting sheet's grabber visiblity.
@@ -419,9 +421,11 @@ extension View {
   /// The default value is an array that contains the value ``large()``.
   /// The array must contain at least one element. When you set this value, specify detents in order from smallest to largest height.
   ///
+  /// - Note: This modifier only takes effect when this view is inside of and visible within a presented ``PageSheet``. You can apply the modifier to any view in the sheet’s view hierarchy.
+  ///
   /// - Parameters:
   ///   - detents: The default value is an array that contains the value ``large()``.
-  /// - Returns: A view that wraps this view and sets the presenting sheet's  ``detents``.
+  /// - Returns: A view that wraps this view and sets the presenting sheet's  ``UISheetPresentationController/detents``.
   public func detents(_ detents: PageSheet.Detents) -> some View {
     self.preference(key: Preference.Detents.self, value: detents)
   }
@@ -435,10 +439,12 @@ extension View {
   /// Without a dimming view, the undimmed area around the sheet responds to user interaction, allowing for a nonmodal experience.
   /// You can use this behavior for sheets with interactive content underneath them.
   ///
+  /// - Note: This modifier only takes effect when this view is inside of and visible within a presented ``PageSheet``. You can apply the modifier to any view in the sheet’s view hierarchy.
+  ///
   /// - Parameters:
-  ///   - identifier: Default value is `nil`.
+  ///   - id: A ``PageSheet.Detent.Identifier`` value, the default is `nil`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's largest undimmed `Detent` identifier.
-  public func largestUndimmedDetentIdentifier(_ identifier: PageSheet.Detent.Identifier?)
+  public func largestUndimmedDetent(id identifier: PageSheet.Detent.Identifier?)
     -> some View
   {
     self.preference(key: Preference.LargestUndimmedDetentIdentifier.self, value: identifier)
@@ -449,10 +455,12 @@ extension View {
   /// This property represents the most recent detent that the user selects or that you set programmatically.
   /// The default value is `nil`, which means the sheet displays at the smallest detent you specify in ``detents``.
   ///
+  /// - Note: This modifier only takes effect when this view is inside of and visible within a presented ``PageSheet``. You can apply the modifier to any view in the sheet’s view hierarchy.
+  ///
   /// - Parameters:
-  ///  - identifier: Default value is `nil`.
+  ///   - id: A ``PageSheet.Detent.Identifier`` value, the default is `nil`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's selected `Detent` identifier.
-  public func selectedDetentIdentifier(_ identifier: PageSheet.Detent.Identifier?) -> some View {
+  public func selectedDetent(id identifier: PageSheet.Detent.Identifier?) -> some View {
     self.preference(key: Preference.SelectedDetentIdentifier.self, value: identifier)
   }
 
@@ -460,6 +468,8 @@ extension View {
   ///
   /// The default value is `false`, which means the sheet defaults to a full screen appearance at compact height.
   /// Set this value to `true` to use an alternate appearance in a compact-height size class, causing the sheet to only attach to the screen on its bottom edge.
+  ///
+  /// - Note: This modifier only takes effect when this view is inside of and visible within a presented ``PageSheet``. You can apply the modifier to any view in the sheet’s view hierarchy.
   ///
   /// - Parameters:
   ///  - preference: Default value is `false`.
@@ -474,6 +484,8 @@ extension View {
   /// Set this value to `true` to use your view controller's ``preferredContentSize`` to determine the width of the sheet instead.
   ///
   /// This property doesn't have an effect when the sheet is in a compact-width and regular-height size class, or when ``prefersEdgeAttachedInCompactHeight`` is `false`.
+  ///
+  /// - Note: This modifier only takes effect when this view is inside of and visible within a presented ``PageSheet``. You can apply the modifier to any view in the sheet’s view hierarchy.
   ///
   /// - Parameters:
   ///  - preference: Default value is `false`.
@@ -491,6 +503,8 @@ extension View {
   /// Set this value to `false` if you want to avoid letting a scroll gesture expand the sheet.
   /// For example, you can set this value on a nonmodal sheet to avoid obscuring the content underneath the sheet.
   ///
+  /// - Note: This modifier only takes effect when this view is inside of and visible within a presented ``PageSheet``. You can apply the modifier to any view in the sheet’s view hierarchy.
+  ///
   /// - Parameters:
   ///  - preference: Default value is `true`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's ``prefersScrollingExpandsWhenScrolledToEdge`` property.
@@ -501,6 +515,8 @@ extension View {
   /// Sets the preferred corner radius on the presenting sheet.
   ///
   /// The default value is `nil`. This property only has an effect when the presenting sheet is at the front of its sheet stack.
+  ///
+  /// - Note: This modifier only takes effect when this view is inside of and visible within a presented ``PageSheet``. You can apply the modifier to any view in the sheet’s view hierarchy.
   ///
   /// - Parameters:
   ///  - preference: Default value is `nil`.
