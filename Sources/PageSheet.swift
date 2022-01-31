@@ -25,6 +25,7 @@ public enum PageSheet {
     var selectedDetentIdentifier: Detent.Identifier? = nil
     var prefersEdgeAttachedInCompactHeight: Bool = false
     var widthFollowsPreferredContentSizeWhenEdgeAttached: Bool = false
+    var prefersScrollingExpandsWhenScrolledToEdge: Bool = true
 
     static var `default`: Self { .init() }
   }
@@ -58,6 +59,9 @@ public enum PageSheet {
         .onPreferenceChange(Preference.WidthFollowsPreferredContentSizeWhenEdgeAttached.self) { newValue in
           self.configuration.widthFollowsPreferredContentSizeWhenEdgeAttached = newValue
         }
+        .onPreferenceChange(Preference.ScrollingExpandsWhenScrolledToEdge.self) { newValue in
+          self.configuration.prefersScrollingExpandsWhenScrolledToEdge = newValue
+        }
         .ignoresSafeArea()
     }
   }
@@ -78,6 +82,7 @@ public enum PageSheet {
             sheet.largestUndimmedDetentIdentifier = config.largestUndimmedDetentIdentifier
             sheet.prefersEdgeAttachedInCompactHeight = config.prefersEdgeAttachedInCompactHeight
             sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = config.widthFollowsPreferredContentSizeWhenEdgeAttached
+            sheet.prefersScrollingExpandsWhenScrolledToEdge = config.prefersScrollingExpandsWhenScrolledToEdge
 
             self.selectedDetentChanged?(config.selectedDetentIdentifier)
             sheet.selectedDetentIdentifier = config.selectedDetentIdentifier
@@ -220,6 +225,10 @@ extension PageSheet {
     struct WidthFollowsPreferredContentSizeWhenEdgeAttached: AutomaticPreferenceKey {
       static var defaultValue: Bool = Configuration.default
         .widthFollowsPreferredContentSizeWhenEdgeAttached
+    }
+
+    struct ScrollingExpandsWhenScrolledToEdge: AutomaticPreferenceKey {
+      static var defaultValue: Bool = Configuration.default.prefersScrollingExpandsWhenScrolledToEdge
     }
   }
 }
@@ -446,5 +455,19 @@ extension View {
   public func widthFollowsPreferredContentSizeWhenEdgeAttached(_ preference: Bool) -> some View {
     self.preference(
       key: Preference.WidthFollowsPreferredContentSizeWhenEdgeAttached.self, value: preference)
+  }
+
+  /// Sets a Boolean value that determines whether scrolling expands the presenting sheet to a larger detent.
+  ///
+  /// The default value is `true`, which means if the sheet can expand to a larger detent than ``selectedDetentIdentifier``,
+  /// scrolling up in the sheet increases its detent instead of scrolling the sheet's content. After the sheet reaches its largest detent, scrolling begins.
+  ///
+  /// Set this value to `false` if you want to avoid letting a scroll gesture expand the sheet.
+  /// For example, you can set this value on a nonmodal sheet to avoid obscuring the content underneath the sheet.
+  ///
+  /// - Parameters:
+  ///  - preference: Default value is `true`.
+  public func preferScrollingExpandsWhenScrolledToEdge(_ preference: Bool) -> some View {
+    self.preference(key: Preference.ScrollingExpandsWhenScrolledToEdge.self, value: preference)
   }
 }
