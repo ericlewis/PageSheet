@@ -9,18 +9,19 @@ Present sheets using [`UISheetPresentationController`](https://developer.apple.c
 * [Requirements](#requirements)
 * [Installation](#installation)
 * [Examples](#examples)
+* [Documentation](#documentation)
 * [Known Issues](#known-issues)
 * [License](#license)
 
-## Requirements
+# Requirements
 The codebase supports iOS and requires Xcode 12.0 or newer
 
-## Installation
-### Xcode
+# Installation
+## Xcode
 Open your project. Navigate to `File > Swift Packages > Add Package Dependency`. Enter the url `https://github.com/ericlewis/PageSheet` and tap `Next`.
 Select the `PageSheet` target and press `Add Package`.
 
-### Swift Package Manager
+## Swift Package Manager
 Add the following line to the `dependencies` in your `Package.swift` file:
 ```swift
 .package(url: "https://github.com/ericlewis/PageSheet.git", .upToNextMajor(from: "1.0.0"))
@@ -50,11 +51,11 @@ let package = Package(
 )
 ```
 
-## Examples
-### Example Project
+# Examples
+## Example Project
 If you are using Xcode 13.2.1 you can navigate to the [`Example`](Example) folder and open the enclosed Swift App Playground to test various features (and see how they are implemented).
 
-### Presentation
+## Presentation
 `PageSheet` works similarly to a typical [`sheet`](https://developer.apple.com/documentation/SwiftUI/View/sheet(isPresented:onDismiss:content:)) view modifier.
 ```swift
 import SwiftUI
@@ -121,10 +122,182 @@ struct ContentView: View {
 }
 ```
 
+# Documentation
 
-## Known Issues
+## Presentation Modifiers
+These modifiers behave exactly the same way as the `sheet` presentation modifiers in SwiftUI.
+
+### `func pageSheet<Content>(isPresented: Binding<Bool>, onDismiss: (() -> Void)?, content: () -> Content) -> some View`
+#### Presents a configurable page sheet when a binding to a Boolean value that you provide is true.
+
+> Use this method when you want to present a configurable sheet view to the user when a Boolean value you provide is `true`.
+
+#### Parameters:
+- `isPresented`: A binding to a Boolean value that determines whether
+to present the sheet that you create in the modifier's
+`content` closure.
+- `onDismiss`: The closure to execute when dismissing the sheet.
+- `content`: A closure that returns the content of the sheet.
+```swift
+func pageSheet<Content: View>(isPresented: Binding<Bool>, onDismiss: (() -> Void)? = nil, content: @escaping () -> Content) -> some View
+```
+---
+
+### `func pageSheet<Item, Content>(item: Binding<Item?>, onDismiss: (() -> Void)?, content: () -> Content) -> some View`
+#### Presents a sheet using the given item as a data source for the sheet’s content.
+
+> Use this method when you need to present a customizable sheet view with content from a custom data source.
+
+#### Parameters:
+- `item`: A binding to an optional source of truth for the sheet.
+When `item` is non-`nil`, the system passes the item's content to
+the modifier's closure. You display this content in a sheet that you
+create that the system displays to the user. If `item` changes,
+the system dismisses the sheet and replaces it with a new one
+using the same process.
+- `onDismiss`: The closure to execute when dismissing the sheet.
+- `content`: A closure returning the content of the sheet.
+```swift
+func pageSheet<Item: Identifiable, Content: View>(item: Binding<Item?>, onDismiss: (() -> Void)? = nil, content: @escaping () -> Content) -> some View
+```
+---
+
+## Presentation Customization Modifiers
+These modifiers only take effect when the modified view is inside of and visible within a presented ``PageSheet``. You can apply the modifier to any view in the sheet’s view hierarchy.
+
+### `func preferGrabberVisible(Bool) -> some View`
+#### Sets a Boolean value that determines whether the presenting sheet shows a grabber at the top.
+
+> The default value is `false`, which means the sheet doesn't show a grabber. A *grabber* is a visual affordance that indicates that a sheet is resizable.
+> Showing a grabber may be useful when it isn't apparent that a sheet can resize or when the sheet can't dismiss interactively.
+> 
+> Set this value to `true` for the system to draw a grabber in the standard system-defined location.
+> The system automatically hides the grabber at appropriate times, like when the sheet is full screen in a compact-height size class or when another sheet presents on top of it.
+
+#### Parameters:
+- `isVisible`: Default value is `false`, set to `true` to display grabber.
+#### Returns: 
+- A view that wraps this view and sets the presenting sheet's grabber visiblity.
+```swift
+func preferGrabberVisible(_ isVisible: Bool) -> some View
+```
+---
+
+### `func detents(PageSheet.Detents) -> some View`
+#### Sets an array of heights where the presenting sheet can rest.
+
+> The default value is an array that contains the value ``large()``.
+> The array must contain at least one element. When you set this value, specify detents in order from smallest to largest height.
+
+#### Parameters:
+- `detents`: The default value is an array that contains the value ``large()``.
+#### Returns: 
+- A view that wraps this view and sets the presenting sheet's  ``UISheetPresentationController/detents``.
+```swift
+func detents(_ detents: PageSheet.Detents) -> some View
+```
+---
+
+### `func largestUndimmedDetent(id: PageSheet.Detent.Identifier?) -> some View`
+#### Sets the largest detent that doesn’t dim the view underneath the presenting sheet.
+
+> The default value is `nil`, which means the system adds a noninteractive dimming view underneath the sheet at all detents.
+> Set this property to only add the dimming view at detents larger than the detent you specify.
+> For example, set this property to ``medium`` to add the dimming view at the ``large`` detent.
+> 
+> Without a dimming view, the undimmed area around the sheet responds to user interaction, allowing for a nonmodal experience.
+> You can use this behavior for sheets with interactive content underneath them.
+
+#### Parameters:
+- `id`: A ``PageSheet.Detent.Identifier`` value, the default is `nil`.
+#### Returns: 
+- A view that wraps this view and sets the presenting sheet's largest undimmed `Detent` identifier.
+```swift
+func largestUndimmedDetent(id identifier: PageSheet.Detent.Identifier?) -> some View
+```
+---
+
+### `func selectedDetent(id: PageSheet.Detent.Identifier?) -> some View`
+#### Sets the identifier of the most recently selected detent on the presenting sheet.
+
+> This property represents the most recent detent that the user selects or that you set programmatically.
+> The default value is `nil`, which means the sheet displays at the smallest detent you specify in ``detents``.
+
+#### Parameters:
+- `id`: A ``PageSheet.Detent.Identifier`` value, the default is `nil`.
+#### Returns: 
+- A view that wraps this view and sets the presenting sheet's selected `Detent` identifier.
+```swift
+func selectedDetent(id identifier: PageSheet.Detent.Identifier?) -> some View
+```
+---
+
+### `func preferEdgeAttachedInCompactHeight(Bool) -> some View`
+#### Sets a Boolean value that determines whether the presenting sheet attaches to the bottom edge of the screen in a compact-height size class.
+
+> The default value is `false`, which means the sheet defaults to a full screen appearance at compact height.
+> Set this value to `true` to use an alternate appearance in a compact-height size class, causing the sheet to only attach to the screen on its bottom edge.
+
+#### Parameters:
+- `preference`: Default value is `false`.
+#### Returns: 
+- A view that wraps this view and sets the presenting sheet's ``prefersEdgeAttachedInCompactHeight`` property.
+```swift
+func preferEdgeAttachedInCompactHeight(_ preference: Bool) -> some View
+```
+---
+
+### `func widthFollowsPreferredContentSizeWhenEdgeAttached(Bool) -> some View`
+#### Sets a Boolean value that determines whether the presenting sheet's width matches its view's preferred content size.
+
+> The default value is `false`, which means the sheet's width equals the width of its container's safe area.
+> Set this value to `true` to use your view controller's ``preferredContentSize`` to determine the width of the sheet instead.
+> 
+> This property doesn't have an effect when the sheet is in a compact-width and regular-height size class, or when ``prefersEdgeAttachedInCompactHeight`` is `false`.
+
+#### Parameters:
+- `preference`: Default value is `false`.
+#### Returns: 
+- A view that wraps this view and sets the presenting sheet's ``prefersEdgeAttachedInCompactHeight`` property.
+```swift
+func widthFollowsPreferredContentSizeWhenEdgeAttached(_ preference: Bool) -> some View
+```
+---
+
+### `func preferScrollingExpandsWhenScrolledToEdge(Bool) -> some View`
+#### Sets a Boolean value that determines whether scrolling expands the presenting sheet to a larger detent.
+
+> The default value is `true`, which means if the sheet can expand to a larger detent than ``selectedDetentIdentifier``,
+> scrolling up in the sheet increases its detent instead of scrolling the sheet's content. After the sheet reaches its largest detent, scrolling begins.
+> 
+> Set this value to `false` if you want to avoid letting a scroll gesture expand the sheet.
+> For example, you can set this value on a nonmodal sheet to avoid obscuring the content underneath the sheet.
+
+#### Parameters:
+- `preference`: Default value is `true`.
+#### Returns: 
+- A view that wraps this view and sets the presenting sheet's ``prefersScrollingExpandsWhenScrolledToEdge`` property.
+```swift
+func preferScrollingExpandsWhenScrolledToEdge(_ preference: Bool) -> some View
+```
+---
+
+### `func preferredSheetCornerRadius(Bool) -> some View`
+#### Sets the preferred corner radius on the presenting sheet.
+
+> The default value is `nil`. This property only has an effect when the presenting sheet is at the front of its sheet stack.
+
+#### Parameters:
+- `preference`: Default value is `nil`.
+#### Returns: 
+- A view that wraps this view and sets the presenting sheet's ``cornerRadius``.
+```swift
+func preferredSheetCornerRadius(_ cornerRadius: CGFloat?) -> some View
+```
+
+# Known Issues
 - Largest undimmed detent seems to affect the dimming of accent color elements in parent views.
 - The `selectedDetentIdentifier` value in `Environment` may not update if the selected `Detent` identifier is changed programmatically.
 
-## License
+# License
 PageSheet is released under the MIT license. See [LICENSE](LICENSE.md) for details.
