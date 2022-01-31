@@ -122,7 +122,7 @@ struct SheetContentView: View {
       .navigationTitle("Sheet View")
       .navigationBarTitleDisplayMode(.inline)
       .detents(detents)
-      .prefersGrabberVisible(grabberVisible)
+      .preferGrabberVisible(grabberVisible)
       .interactiveDismissDisabled(dismissDisabled)
       .selectedDetentIdentifier(selectedDetentId)
       .preferredColorScheme(.dark)
