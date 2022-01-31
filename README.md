@@ -23,7 +23,7 @@ Select the `PageSheet` target and press `Add Package`.
 ### Swift Package Manager
 Add the following line to the `dependencies` in your `Package.swift` file:
 ```swift
-.package(url: "https://github.com/ericlewis/PageSheet.git", .upToNextMajor(from: "0.7.0"))
+.package(url: "https://github.com/ericlewis/PageSheet.git", .upToNextMajor(from: "1.0.0"))
 ```
 Next, add `PageSheet` as a dependency for your targets:
 ```swift
@@ -40,7 +40,7 @@ let package = Package(
     dependencies: [
         .package(
           url: "https://github.com/ericlewis/PageSheet.git", 
-          .upToNextMajor(from: "0.7.0"))
+          .upToNextMajor(from: "1.0.0"))
     ],
     targets: [
         .target(
