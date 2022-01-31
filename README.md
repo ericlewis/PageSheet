@@ -20,8 +20,16 @@
 ## Table of Contents
 * [Requirements](#requirements)
 * [Installation](#installation)
+  * [Xcode](#xcode)
+  * [Swift Package Manager](#swift-package-manager)
 * [Examples](#examples)
+  * [Example Project](#example-project)
+  * [Presentation](#presentation)
+  * [Customization](#customization)
 * [Documentation](#documentation)
+  * [Presentation Modifiers](#presentation-modifiers)
+  * [Presentation Customization Modifiers](#presentation-customization-modifiers)
+  * [PageSheetView](#pagesheetview)
 * [Known Issues](#known-issues)
 * [License](#license)
 
