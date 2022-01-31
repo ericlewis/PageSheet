@@ -94,6 +94,7 @@ extension BottomSheetPresenter {
 
     private func buildContent(with item: Item) -> some View {
       parent.contentBuilder(item)
+        .environmentSelectedDetentIdentifier(self.viewController?.sheetPresentationController?.selectedDetentIdentifier)
         .modifier(
           PresentationWatcherViewModifier(
             presentationModeChanged: {
@@ -173,8 +174,17 @@ extension BottomSheetPresenter {
           }
         }.onPreferenceChange(DismissDisabledPreferenceKey.self) { [self] preference in
           dismissDisabled = preference
+        }.onPreferenceChange(SelectedDetentIdentifierPreferenceKey.self) { id in
+          if let sheet = self.viewController?.sheetPresentationController {
+            guard id != sheet.selectedDetentIdentifier else {
+              return
+            }
+
+            sheet.animateChanges {
+              sheet.selectedDetentIdentifier = id
+            }
+          }
         }
-        .selectedDetentIdentifier(self.viewController?.sheetPresentationController?.selectedDetentIdentifier)
     }
 
     private func resetItemBinding() {

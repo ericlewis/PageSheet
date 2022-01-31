@@ -63,7 +63,7 @@ struct SheetContentView: View {
   private var count = 0
 
   @State
-  private var detents: [UISheetPresentationController.Detent] = [.medium()]
+  private var detents: [UISheetPresentationController.Detent] = [.medium(), .large()]
 
   @State
   private var grabberVisible = true
@@ -83,6 +83,9 @@ struct SheetContentView: View {
   @State
   private var widthFollowsPreferredContentSizeWhenEdgeAttached = false
 
+  @State
+  private var selectedDetentId: UISheetPresentationController.Detent.Identifier? = nil
+
   @Environment(\.selectedDetentIdentifier)
   private var selectedDetent
 
@@ -91,6 +94,15 @@ struct SheetContentView: View {
       List {
         Section {
           Text(selectedDetent?.rawValue ?? "nil")
+          Button("Set detent to nil") {
+            selectedDetentId = nil
+          }
+          Button("Set detent to medium") {
+            selectedDetentId = .medium
+          }
+          Button("Set detent to large") {
+            selectedDetentId = .large
+          }
         } header: {
           Text("Selected Detent Identifier")
         }
@@ -139,6 +151,7 @@ struct SheetContentView: View {
       .prefersScrollingExpandsWhenScrolledToEdge(prefersScrollingExpandsWhenScrolledToEdge)
       .prefersEdgeAttachedInCompactHeight(prefersEdgeAttachedInCompactHeight)
       .widthFollowsPreferredContentSizeWhenEdgeAttached(widthFollowsPreferredContentSizeWhenEdgeAttached)
+      .selectedDetentIdentifier(selectedDetentId)
     }
     .bottomSheet(isPresented: $childPresented) {
       SheetContentView()

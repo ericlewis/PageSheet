@@ -16,7 +16,7 @@ extension EnvironmentValues {
 }
 
 extension View {
-  func selectedDetentIdentifier(_ id: UISheetPresentationController.Detent.Identifier? = nil) -> some View {
+  func environmentSelectedDetentIdentifier(_ id: UISheetPresentationController.Detent.Identifier? = nil) -> some View {
     self.environment(\._selectedDetentIdentifier, id)
   }
 }
