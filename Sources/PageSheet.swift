@@ -26,6 +26,7 @@ public enum PageSheet {
     var prefersEdgeAttachedInCompactHeight: Bool = false
     var widthFollowsPreferredContentSizeWhenEdgeAttached: Bool = false
     var prefersScrollingExpandsWhenScrolledToEdge: Bool = true
+    var preferredCornerRadius: CGFloat? = nil
 
     static var `default`: Self { .init() }
   }
@@ -63,6 +64,9 @@ public enum PageSheet {
         .onPreferenceChange(Preference.ScrollingExpandsWhenScrolledToEdge.self) { newValue in
           self.configuration.prefersScrollingExpandsWhenScrolledToEdge = newValue
         }
+        .onPreferenceChange(Preference.CornerRadius.self) { newValue in
+          self.configuration.preferredCornerRadius = newValue
+        }
         .ignoresSafeArea()
     }
   }
@@ -86,6 +90,7 @@ public enum PageSheet {
               config.widthFollowsPreferredContentSizeWhenEdgeAttached
             sheet.prefersScrollingExpandsWhenScrolledToEdge =
               config.prefersScrollingExpandsWhenScrolledToEdge
+            sheet.preferredCornerRadius = config.preferredCornerRadius
 
             self.selectedDetentChanged?(config.selectedDetentIdentifier)
             sheet.selectedDetentIdentifier = config.selectedDetentIdentifier
@@ -236,6 +241,9 @@ extension PageSheet {
       static var defaultValue: Bool = Configuration.default
         .prefersScrollingExpandsWhenScrolledToEdge
     }
+
+    struct CornerRadius: AutomaticPreferenceKey {
+      static var defaultValue: CGFloat? = Configuration.default.preferredCornerRadius
     }
   }
 }
@@ -476,5 +484,16 @@ extension View {
   ///  - preference: Default value is `true`.
   public func preferScrollingExpandsWhenScrolledToEdge(_ preference: Bool) -> some View {
     self.preference(key: Preference.ScrollingExpandsWhenScrolledToEdge.self, value: preference)
+  }
+
+  /// Sets the preferred corner radius on the presenting sheet.
+  ///
+  /// The default value is `nil`. This property only has an effect when the presenting sheet is at the front of its sheet stack.
+  ///
+  /// - Parameters:
+  ///  - preference: Default value is `nil`.
+  /// - Returns: A view that wraps this view and sets the presenting sheet's ``cornerRadius``.
+  public func preferredSheetCornerRadius(_ cornerRadius: CGFloat?) -> some View {
+    self.preference(key: Preference.CornerRadius.self, value: cornerRadius)
   }
 }
