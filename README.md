@@ -288,7 +288,9 @@ func preferScrollingExpandsWhenScrolledToEdge(_ preference: Bool) -> some View
 - A view that wraps this view and sets the presenting sheet's ``prefersScrollingExpandsWhenScrolledToEdge`` property.
 ---
 
-### `func preferredSheetCornerRadius(CGFloat?) -> some View`
+```swift
+func preferredSheetCornerRadius(_ cornerRadius: CGFloat?) -> some View
+```
 #### Sets the preferred corner radius on the presenting sheet.
 
 > The default value is `nil`. This property only has an effect when the presenting sheet is at the front of its sheet stack.
@@ -297,9 +299,43 @@ func preferScrollingExpandsWhenScrolledToEdge(_ preference: Bool) -> some View
 - `preference`: Default value is `nil`.
 #### Returns: 
 - A view that wraps this view and sets the presenting sheet's ``cornerRadius``.
+---
+
+## PageSheetView
+#### A SwiftUI wrapper view for presentation controllers that manages the appearance and behavior of a sheet.
+
+> This view makes it easier to embed `PageSheetView` in custom navigation solutions such as `FlowStacks` and is meant to be presented using a `sheet` modifier. Other ways of presenting may not work and are not officially supported.
+
+##### Example
 ```swift
-func preferredSheetCornerRadius(_ cornerRadius: CGFloat?) -> some View
+import SwiftUI
+import SheetPage
+
+struct ContentView: View {
+  @State
+  private var sheetPresented = false
+  
+  var body: some View {
+    VStack {
+      Button("Present Sheet") {
+        sheetPresented = true
+      }
+    }
+    .sheet(isPresented: $sheetPresented) {
+      SheetPageView {
+        Text("Hello World!")
+          .preferGrabberVisible(true)
+      }
+    }
+  }
+}
 ```
+
+#### Parameters:
+- `content`: A closure that returns the content of the sheet.
+#### Returns: 
+- A presentation controller wrapped SwiftUI view.
+
 
 # Known Issues
 - Largest undimmed detent seems to affect the dimming of accent color elements in parent views.
