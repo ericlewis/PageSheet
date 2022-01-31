@@ -1,11 +1,11 @@
 import SwiftUI
 
-// MARK: - LazyPreferenceKey
+// MARK: - AutomaticPreferenceKey
 
-protocol AutomaticPreferenceKey: PreferenceKey {}
+private protocol AutomaticPreferenceKey: PreferenceKey {}
 
 extension AutomaticPreferenceKey {
-  static func reduce(value: inout Value, nextValue: () -> Value) {
+  fileprivate static func reduce(value: inout Value, nextValue: () -> Value) {
     value = nextValue()
   }
 }
@@ -32,12 +32,12 @@ public enum PageSheet {
 
   // MARK: - ConfiguredHostingView
 
-  fileprivate struct ConfiguredHostingView<V: View>: View {
+  fileprivate struct ConfiguredHostingView<Content: View>: View {
 
     @State
     private var configuration: Configuration = .default
 
-    let content: V
+    let content: Content
 
     var body: some View {
       HostingView(configuration: $configuration, content: content)
@@ -56,7 +56,8 @@ public enum PageSheet {
         .onPreferenceChange(Preference.EdgeAttachedInCompactHeight.self) { newValue in
           self.configuration.prefersEdgeAttachedInCompactHeight = newValue
         }
-        .onPreferenceChange(Preference.WidthFollowsPreferredContentSizeWhenEdgeAttached.self) { newValue in
+        .onPreferenceChange(Preference.WidthFollowsPreferredContentSizeWhenEdgeAttached.self) {
+          newValue in
           self.configuration.widthFollowsPreferredContentSizeWhenEdgeAttached = newValue
         }
         .onPreferenceChange(Preference.ScrollingExpandsWhenScrolledToEdge.self) { newValue in
@@ -68,7 +69,7 @@ public enum PageSheet {
 
   // MARK: - HostingController
 
-  fileprivate class HostingController<V: View>: UIHostingController<V>,
+  fileprivate class HostingController<Content: View>: UIHostingController<Content>,
     UISheetPresentationControllerDelegate
   {
     var configuration: Configuration = .default {
@@ -81,8 +82,10 @@ public enum PageSheet {
             sheet.detents = config.detents
             sheet.largestUndimmedDetentIdentifier = config.largestUndimmedDetentIdentifier
             sheet.prefersEdgeAttachedInCompactHeight = config.prefersEdgeAttachedInCompactHeight
-            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = config.widthFollowsPreferredContentSizeWhenEdgeAttached
-            sheet.prefersScrollingExpandsWhenScrolledToEdge = config.prefersScrollingExpandsWhenScrolledToEdge
+            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached =
+              config.widthFollowsPreferredContentSizeWhenEdgeAttached
+            sheet.prefersScrollingExpandsWhenScrolledToEdge =
+              config.prefersScrollingExpandsWhenScrolledToEdge
 
             self.selectedDetentChanged?(config.selectedDetentIdentifier)
             sheet.selectedDetentIdentifier = config.selectedDetentIdentifier
@@ -104,8 +107,10 @@ public enum PageSheet {
 
   // MARK: - HostingView
 
-  fileprivate struct HostingView<V: View>: UIViewControllerRepresentable {
-    typealias ModifiedView = ModifiedContent<V, ApplySelectedDetentEnvironmentValueViewModifier>
+  fileprivate struct HostingView<Content: View>: UIViewControllerRepresentable {
+    typealias ModifiedView = ModifiedContent<
+      Content, ApplySelectedDetentEnvironmentValueViewModifier
+    >
 
     @Binding
     var configuration: Configuration
@@ -113,7 +118,7 @@ public enum PageSheet {
     @State
     private var selectedDetentIdentifier: Detent.Identifier?
 
-    let content: V
+    let content: Content
 
     func makeUIViewController(context: Context) -> HostingController<ModifiedView> {
       HostingController(
@@ -158,13 +163,13 @@ extension PageSheet {
 
     // MARK: Presentation
 
-    struct BooleanPresentation<V: View>: ViewModifier {
+    struct BooleanPresentation<SheetContent: View>: ViewModifier {
 
       @Binding
       var isPresented: Bool
 
       let onDismiss: (() -> Void)?
-      let content: () -> V
+      let content: () -> SheetContent
 
       func body(content: Content) -> some View {
         content.sheet(isPresented: $isPresented, onDismiss: onDismiss) {
@@ -177,13 +182,13 @@ extension PageSheet {
 
     // MARK: ItemPresentation
 
-    struct ItemPresentation<Item: Identifiable, V: View>: ViewModifier {
+    struct ItemPresentation<Item: Identifiable, SheetContent: View>: ViewModifier {
 
       @Binding
       var item: Item?
 
       let onDismiss: (() -> Void)?
-      let content: (Item) -> V
+      let content: (Item) -> SheetContent
 
       func body(content: Content) -> some View {
         content.sheet(item: $item, onDismiss: onDismiss) { item in
@@ -228,7 +233,9 @@ extension PageSheet {
     }
 
     struct ScrollingExpandsWhenScrolledToEdge: AutomaticPreferenceKey {
-      static var defaultValue: Bool = Configuration.default.prefersScrollingExpandsWhenScrolledToEdge
+      static var defaultValue: Bool = Configuration.default
+        .prefersScrollingExpandsWhenScrolledToEdge
+    }
     }
   }
 }
@@ -237,12 +244,12 @@ extension PageSheet {
 
 // MARK: Internal
 
-struct SelectedDetentIdentifier: EnvironmentKey {
+private struct SelectedDetentIdentifier: EnvironmentKey {
   static let defaultValue: PageSheet.Detent.Identifier? = nil
 }
 
 extension EnvironmentValues {
-  var _selectedDetentIdentifier: PageSheet.Detent.Identifier? {
+  fileprivate var _selectedDetentIdentifier: PageSheet.Detent.Identifier? {
     get { self[SelectedDetentIdentifier.self] }
     set { self[SelectedDetentIdentifier.self] = newValue }
   }
