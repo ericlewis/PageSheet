@@ -19,23 +19,14 @@ public enum PageSheet {
   // MARK: - Configuration
 
   fileprivate struct Configuration {
-    var prefersGrabberVisible: Bool
-    var detents: Detents
-    var largestUndimmedDetentIdentifier: Detent.Identifier?
-    var selectedDetentIdentifier: Detent.Identifier?
-    var prefersEdgeAttachedInCompactHeight: Bool
-    var widthFollowsPreferredContentSizeWhenEdgeAttached: Bool
+    var prefersGrabberVisible: Bool = false
+    var detents: Detents = [.large()]
+    var largestUndimmedDetentIdentifier: Detent.Identifier? = nil
+    var selectedDetentIdentifier: Detent.Identifier? = nil
+    var prefersEdgeAttachedInCompactHeight: Bool = false
+    var widthFollowsPreferredContentSizeWhenEdgeAttached: Bool = false
 
-    static var `default`: Self {
-      Self(
-        prefersGrabberVisible: false,
-        detents: [.large()],
-        largestUndimmedDetentIdentifier: nil,
-        selectedDetentIdentifier: nil,
-        prefersEdgeAttachedInCompactHeight: false,
-        widthFollowsPreferredContentSizeWhenEdgeAttached: false
-      )
-    }
+    static var `default`: Self { .init() }
   }
 
   // MARK: - ConfiguredHostingView
