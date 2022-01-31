@@ -3,19 +3,19 @@
 import PackageDescription
 
 let package = Package(
-  name: "BottomSheetView",
+  name: "PageSheet",
   platforms: [
     .iOS("15.0")
   ],
   products: [
     .library(
-      name: "BottomSheetView",
-      targets: ["BottomSheetView"]),
+      name: "PageSheet",
+      targets: ["PageSheet"]),
   ],
   dependencies: [],
   targets: [
     .target(
-      name: "BottomSheetView",
+      name: "PageSheet",
       dependencies: [],
       path: "./Sources")
   ]
