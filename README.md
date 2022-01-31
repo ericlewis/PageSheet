@@ -123,7 +123,8 @@ struct ContentView: View {
 
 
 ## Known Issues
-- Largest undimmed detent changes seem to affect the dimming of accent color elements in parent views.
+- Largest undimmed detent seems to affect the dimming of accent color elements in parent views.
+- The `selectedDetentIdentifier` value in `Environment` may not update if the selected `Detent` identifier is changed programmatically.
 
 ## License
 PageSheet is released under the MIT license. See [LICENSE](LICENSE.md) for details.

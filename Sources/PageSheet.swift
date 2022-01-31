@@ -137,7 +137,7 @@ public enum PageSheet {
 
     func updateUIViewController(_ controller: HostingController<ModifiedView>, context: Context) {
       controller.selectedDetentChanged = { newDetent in
-        // TODO: fixme
+        // FIXME: this causes issues since it is drawing during a state update. Need to figure out how to... not do that.
         // self.selectedDetentIdentifier = $0
       }
       controller.configuration = configuration
