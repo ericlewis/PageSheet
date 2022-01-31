@@ -282,9 +282,9 @@ extension View {
   /// Presents a page sheet when a binding to a Boolean value that you
   /// provide is true.
   ///
-  /// Use this method when you want to present a modal view to the
+  /// Use this method when you want to present a sheet view to the
   /// user when a Boolean value you provide is true. The example
-  /// below displays a modal view of the mockup for a software license
+  /// below displays a sheet view of the mockup for a software license
   /// agreement when the user toggles the `isShowingSheet` variable by
   /// clicking or tapping on the "Show License Agreement" button:
   ///
@@ -336,7 +336,7 @@ extension View {
   /// Presents a page sheet using the given item as a data source
   /// for the sheet's content.
   ///
-  /// Use this method when you need to present a modal view with content
+  /// Use this method when you need to present a sheet view with content
   /// from a custom data source. The example below shows a custom data source
   /// `InventoryItem` that the `content` closure uses to populate the display
   /// the action sheet shows to the user:
@@ -407,14 +407,19 @@ extension View {
   ///
   /// - Parameters:
   ///   - isVisible: Default value is `false`, set to `true` to display grabber.
+  /// - Returns: A view that wraps this view and sets the presenting sheet's grabber visiblity.
   public func preferGrabberVisible(_ isVisible: Bool) -> some View {
     self.preference(key: Preference.GrabberVisible.self, value: isVisible)
   }
 
   /// Sets an array of heights where the presenting sheet can rest.
   ///
+  /// The default value is an array that contains the value ``large()``.
+  /// The array must contain at least one element. When you set this value, specify detents in order from smallest to largest height.
+  ///
   /// - Parameters:
-  ///   - detents: The default value is an array that contains the value ``large()``. This array must contain at least one element. When you set this value, specify detents in order from smallest to largest height.
+  ///   - detents: The default value is an array that contains the value ``large()``.
+  /// - Returns: A view that wraps this view and sets the presenting sheet's  ``detents``.
   public func detents(_ detents: PageSheet.Detents) -> some View {
     self.preference(key: Preference.Detents.self, value: detents)
   }
@@ -430,6 +435,7 @@ extension View {
   ///
   /// - Parameters:
   ///   - identifier: Default value is `nil`.
+  /// - Returns: A view that wraps this view and sets the presenting sheet's largest undimmed `Detent` identifier.
   public func largestUndimmedDetentIdentifier(_ identifier: PageSheet.Detent.Identifier?)
     -> some View
   {
@@ -443,6 +449,7 @@ extension View {
   ///
   /// - Parameters:
   ///  - identifier: Default value is `nil`.
+  /// - Returns: A view that wraps this view and sets the presenting sheet's selected `Detent` identifier.
   public func selectedDetentIdentifier(_ identifier: PageSheet.Detent.Identifier?) -> some View {
     self.preference(key: Preference.SelectedDetentIdentifier.self, value: identifier)
   }
@@ -454,6 +461,7 @@ extension View {
   ///
   /// - Parameters:
   ///  - preference: Default value is `false`.
+  /// - Returns: A view that wraps this view and sets the presenting sheet's ``prefersEdgeAttachedInCompactHeight`` property.
   public func preferEdgeAttachedInCompactHeight(_ preference: Bool) -> some View {
     self.preference(key: Preference.EdgeAttachedInCompactHeight.self, value: preference)
   }
@@ -467,6 +475,7 @@ extension View {
   ///
   /// - Parameters:
   ///  - preference: Default value is `false`.
+  /// - Returns: A view that wraps this view and sets the presenting sheet's ``prefersEdgeAttachedInCompactHeight`` property.
   public func widthFollowsPreferredContentSizeWhenEdgeAttached(_ preference: Bool) -> some View {
     self.preference(
       key: Preference.WidthFollowsPreferredContentSizeWhenEdgeAttached.self, value: preference)
@@ -482,6 +491,7 @@ extension View {
   ///
   /// - Parameters:
   ///  - preference: Default value is `true`.
+  /// - Returns: A view that wraps this view and sets the presenting sheet's ``prefersScrollingExpandsWhenScrolledToEdge`` property.
   public func preferScrollingExpandsWhenScrolledToEdge(_ preference: Bool) -> some View {
     self.preference(key: Preference.ScrollingExpandsWhenScrolledToEdge.self, value: preference)
   }
