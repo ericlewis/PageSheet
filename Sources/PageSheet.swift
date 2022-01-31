@@ -157,8 +157,7 @@ public enum PageSheet {
     var selectedDetentIdentifier: Detent.Identifier?
 
     func body(content: Content) -> some View {
-      Self._printChanges()
-      return content.environment(\._selectedDetentIdentifier, selectedDetentIdentifier)
+      content.environment(\._selectedDetentIdentifier, selectedDetentIdentifier)
     }
   }
 }
