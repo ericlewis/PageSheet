@@ -62,6 +62,14 @@ struct DismissDisabledPreferenceKey: PreferenceKey {
   }
 }
 
+struct SelectedDetentIdentifierPreferenceKey: PreferenceKey {
+  static var defaultValue: UISheetPresentationController.Detent.Identifier? = nil
+
+  static func reduce(value: inout UISheetPresentationController.Detent.Identifier?, nextValue: () -> UISheetPresentationController.Detent.Identifier?) {
+    value = nextValue()
+  }
+}
+
 extension View {
   /// The array of heights where a sheet can rest.
   public func detents(_ detents: [UISheetPresentationController.Detent]) -> some View {
@@ -98,9 +106,13 @@ extension View {
     self.preference(key: PreferredCornerRadiusPreferenceKey.self, value: preference)
   }
 
-
   /// Conditionally prevents interactive dismissal of a popover or a sheet.
   public func dismissDisabled(_ preference: Bool) -> some View {
     self.preference(key: DismissDisabledPreferenceKey.self, value: preference)
+  }
+
+  /// The identifier of the most recently selected detent.
+  public func selectedDetentIdentifier(_ id: UISheetPresentationController.Detent.Identifier?) -> some View {
+    self.preference(key: SelectedDetentIdentifierPreferenceKey.self, value: id)
   }
 }
