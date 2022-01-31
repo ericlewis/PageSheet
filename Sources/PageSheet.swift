@@ -266,6 +266,8 @@ extension EnvironmentValues {
 // MARK: External
 
 extension EnvironmentValues {
+
+  /// The current ``Detent`` identifier of the view associated with this environment.
   public var selectedDetentIdentifier: PageSheet.Detent.Identifier? {
     self[SelectedDetentIdentifier.self]
   }
