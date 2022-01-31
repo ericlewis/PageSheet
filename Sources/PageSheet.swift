@@ -18,12 +18,13 @@ public enum PageSheet {
 
   // MARK: - Configuration
 
-  struct Configuration {
+  fileprivate struct Configuration {
     var prefersGrabberVisible: Bool
     var detents: Detents
     var largestUndimmedDetentIdentifier: Detent.Identifier?
     var selectedDetentIdentifier: Detent.Identifier?
     var prefersEdgeAttachedInCompactHeight: Bool
+    var widthFollowsPreferredContentSizeWhenEdgeAttached: Bool
 
     static var `default`: Self {
       Self(
@@ -31,14 +32,15 @@ public enum PageSheet {
         detents: [.large()],
         largestUndimmedDetentIdentifier: nil,
         selectedDetentIdentifier: nil,
-        prefersEdgeAttachedInCompactHeight: false
+        prefersEdgeAttachedInCompactHeight: false,
+        widthFollowsPreferredContentSizeWhenEdgeAttached: false
       )
     }
   }
 
   // MARK: - ConfiguredHostingView
 
-  struct ConfiguredHostingView<V: View>: View {
+  fileprivate struct ConfiguredHostingView<V: View>: View {
 
     @State
     private var configuration: Configuration = .default
@@ -62,13 +64,18 @@ public enum PageSheet {
         .onPreferenceChange(Preference.EdgeAttachedInCompactHeight.self) { newValue in
           self.configuration.prefersEdgeAttachedInCompactHeight = newValue
         }
+        .onPreferenceChange(Preference.WidthFollowsPreferredContentSizeWhenEdgeAttached.self) { newValue in
+          self.configuration.widthFollowsPreferredContentSizeWhenEdgeAttached = newValue
+        }
         .ignoresSafeArea()
     }
   }
 
   // MARK: - HostingController
 
-  class HostingController<V: View>: UIHostingController<V>, UISheetPresentationControllerDelegate {
+  fileprivate class HostingController<V: View>: UIHostingController<V>,
+    UISheetPresentationControllerDelegate
+  {
     var configuration: Configuration = .default {
       didSet {
         if let sheet = self.sheetPresentationController {
@@ -79,6 +86,7 @@ public enum PageSheet {
             sheet.detents = config.detents
             sheet.largestUndimmedDetentIdentifier = config.largestUndimmedDetentIdentifier
             sheet.prefersEdgeAttachedInCompactHeight = config.prefersEdgeAttachedInCompactHeight
+            sheet.widthFollowsPreferredContentSizeWhenEdgeAttached = config.widthFollowsPreferredContentSizeWhenEdgeAttached
 
             self.selectedDetentChanged?(config.selectedDetentIdentifier)
             sheet.selectedDetentIdentifier = config.selectedDetentIdentifier
@@ -100,7 +108,7 @@ public enum PageSheet {
 
   // MARK: - HostingView
 
-  struct HostingView<V: View>: UIViewControllerRepresentable {
+  fileprivate struct HostingView<V: View>: UIViewControllerRepresentable {
     typealias ModifiedView = ModifiedContent<V, ApplySelectedDetentEnvironmentValueViewModifier>
 
     @Binding
@@ -135,7 +143,7 @@ public enum PageSheet {
     }
   }
 
-  struct ApplySelectedDetentEnvironmentValueViewModifier: ViewModifier {
+  fileprivate struct ApplySelectedDetentEnvironmentValueViewModifier: ViewModifier {
     @Binding
     var selectedDetentIdentifier: Detent.Identifier?
 
@@ -150,7 +158,7 @@ public enum PageSheet {
 
 extension PageSheet {
 
-  enum Modifier {
+  fileprivate enum Modifier {
 
     // MARK: Presentation
 
@@ -196,7 +204,7 @@ extension PageSheet {
 // MARK: Preferences
 
 extension PageSheet {
-  enum Preference {
+  fileprivate enum Preference {
     struct GrabberVisible: AutomaticPreferenceKey {
       static var defaultValue: Bool = Configuration.default.prefersGrabberVisible
     }
@@ -218,6 +226,10 @@ extension PageSheet {
       static var defaultValue: Bool = Configuration.default.prefersEdgeAttachedInCompactHeight
     }
 
+    struct WidthFollowsPreferredContentSizeWhenEdgeAttached: AutomaticPreferenceKey {
+      static var defaultValue: Bool = Configuration.default
+        .widthFollowsPreferredContentSizeWhenEdgeAttached
+    }
   }
 }
 
@@ -250,7 +262,7 @@ extension View {
 
   // MARK: Presentation
 
-  typealias Modifier = PageSheet.Modifier
+  fileprivate typealias Modifier = PageSheet.Modifier
 
   /// Presents a page sheet when a binding to a Boolean value that you
   /// provide is true.
@@ -368,14 +380,14 @@ extension View {
 
   // MARK: Preferences
 
-  typealias Preference = PageSheet.Preference
+  fileprivate typealias Preference = PageSheet.Preference
 
   /// Sets a Boolean value that determines whether the presenting sheet shows a grabber at the top.
   ///
-  /// The default value is false, which means the sheet doesn't show a grabber. A *grabber* is a visual affordance that indicates that a sheet is resizable.
+  /// The default value is `false`, which means the sheet doesn't show a grabber. A *grabber* is a visual affordance that indicates that a sheet is resizable.
   /// Showing a grabber may be useful when it isn't apparent that a sheet can resize or when the sheet can't dismiss interactively.
   ///
-  /// Set this value to true for the system to draw a grabber in the standard system-defined location.
+  /// Set this value to `true` for the system to draw a grabber in the standard system-defined location.
   /// The system automatically hides the grabber at appropriate times, like when the sheet is full screen in a compact-height size class or when another sheet presents on top of it.
   ///
   /// - Parameters:
@@ -387,7 +399,7 @@ extension View {
   /// Sets an array of heights where the presenting sheet can rest.
   ///
   /// - Parameters:
-  ///   - detents: The default value is an array that contains the value `large()`. This array must contain at least one element. When you set this value, specify detents in order from smallest to largest height.
+  ///   - detents: The default value is an array that contains the value ``large()``. This array must contain at least one element. When you set this value, specify detents in order from smallest to largest height.
   public func detents(_ detents: PageSheet.Detents) -> some View {
     self.preference(key: Preference.Detents.self, value: detents)
   }
@@ -396,7 +408,7 @@ extension View {
   ///
   /// The default value is `nil`, which means the system adds a noninteractive dimming view underneath the sheet at all detents.
   /// Set this property to only add the dimming view at detents larger than the detent you specify.
-  /// For example, set this property to `medium` to add the dimming view at the `large` detent.
+  /// For example, set this property to ``medium`` to add the dimming view at the ``large`` detent.
   ///
   /// Without a dimming view, the undimmed area around the sheet responds to user interaction, allowing for a nonmodal experience.
   /// You can use this behavior for sheets with interactive content underneath them.
@@ -412,7 +424,7 @@ extension View {
   /// Sets the identifier of the most recently selected detent on the presenting sheet.
   ///
   /// This property represents the most recent detent that the user selects or that you set programmatically.
-  /// The default value is `nil`, which means the sheet displays at the smallest detent you specify in `detents`.
+  /// The default value is `nil`, which means the sheet displays at the smallest detent you specify in ``detents``.
   ///
   /// - Parameters:
   ///  - identifier: Default value is `nil`.
@@ -429,5 +441,19 @@ extension View {
   ///  - preference: Default value is `false`.
   public func preferEdgeAttachedInCompactHeight(_ preference: Bool) -> some View {
     self.preference(key: Preference.EdgeAttachedInCompactHeight.self, value: preference)
+  }
+
+  /// Sets a Boolean value that determines whether the presenting sheet's width matches its view's preferred content size.
+  ///
+  /// The default value is `false`, which means the sheet's width equals the width of its container's safe area.
+  /// Set this value to `true` to use your view controller's ``preferredContentSize`` to determine the width of the sheet instead.
+  ///
+  /// This property doesn't have an effect when the sheet is in a compact-width and regular-height size class, or when ``prefersEdgeAttachedInCompactHeight`` is `false`.
+  ///
+  /// - Parameters:
+  ///  - preference: Default value is `false`.
+  public func widthFollowsPreferredContentSizeWhenEdgeAttached(_ preference: Bool) -> some View {
+    self.preference(
+      key: Preference.WidthFollowsPreferredContentSizeWhenEdgeAttached.self, value: preference)
   }
 }
