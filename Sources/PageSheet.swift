@@ -21,7 +21,7 @@ public enum PageSheet {
 
   // MARK: - Configuration
 
-  fileprivate struct Configuration {
+  fileprivate struct Configuration: Equatable {
     var prefersGrabberVisible: Bool = false
     var detents: Detents = [.large()]
     var largestUndimmedDetentIdentifier: Detent.Identifier? = nil
@@ -76,8 +76,8 @@ public enum PageSheet {
         .onPreferenceChange(Preference.CornerRadius.self) { newValue in
           self.configuration.preferredCornerRadius = newValue
         }
-        .ignoresSafeArea()
         .environment(\._selectedDetentIdentifier, self.selectedDetent)
+        .ignoresSafeArea()
     }
   }
 
@@ -153,8 +153,13 @@ public enum PageSheet {
     }
 
     func updateUIViewController(_ controller: HostingController<Content>, context: Context) {
-      controller.configuration = configuration
-      controller.rootView = content
+      if controller.configuration != configuration {
+        controller.configuration = configuration
+        controller.rootView = content
+
+        // NOTE: Fixes safe area flickering when we throw the view up and down.
+        controller.view.invalidateIntrinsicContentSize()
+      }
     }
   }
 }
