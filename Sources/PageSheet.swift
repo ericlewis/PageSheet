@@ -122,6 +122,13 @@ public enum PageSheet {
       fatalError("init(coder:) has not been implemented")
     }
 
+    override func viewWillDisappear(_ animated: Bool) {
+      super.viewWillDisappear(animated)
+
+      // NOTE: Fixes an issue with largestUndimmedDetentIdentifier perpetually dimming buttons.
+      self.parent?.presentingViewController?.view.tintAdjustmentMode = .normal
+    }
+
     // MARK: UISheetPresentationControllerDelegate
 
     func sheetPresentationControllerDidChangeSelectedDetentIdentifier(
@@ -159,6 +166,13 @@ public enum PageSheet {
 
         // NOTE: Fixes safe area flickering when we throw the view up and down.
         controller.view.invalidateIntrinsicContentSize()
+
+        // NOTE: Fixes an issue with largestUndimmedDetentIdentifier perpetually dimming buttons.
+        if configuration.largestUndimmedDetentIdentifier != nil {
+          controller.parent?.presentingViewController?.view.tintAdjustmentMode = .normal
+        } else {
+          controller.parent?.presentingViewController?.view.tintAdjustmentMode = .automatic
+        }
       }
     }
   }
