@@ -137,6 +137,7 @@ extension View {
   /// - Parameters:
   ///   - isVisible: Default value is `false`, set to `true` to display grabber.
   /// - Returns: A view that wraps this view and sets the presenting sheet's grabber visiblity.
+  @available(*, deprecated, message: "Use `sheetPreference(_:)` instead.")
   @inlinable public func preferGrabberVisible(_ isVisible: Bool) -> some View {
     self.sheetPreference(.grabberVisible(isVisible))
   }
@@ -151,6 +152,7 @@ extension View {
   /// - Parameters:
   ///   - detents: The default value is an array that contains the value ``large()``.
   /// - Returns: A view that wraps this view and sets the presenting sheet's  ``UISheetPresentationController/detents``.
+  @available(*, deprecated, message: "Use `sheetPreference(_:)` instead.")
   @inlinable public func detents(_ detents: PageSheet.Detents) -> some View {
     self.sheetPreference(.detents(detents))
   }
@@ -169,6 +171,7 @@ extension View {
   /// - Parameters:
   ///   - id: A ``PageSheet.Detent.Identifier`` value, the default is `nil`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's largest undimmed `Detent` identifier.
+  @available(*, deprecated, message: "Use `sheetPreference(_:)` instead.")
   @inlinable public func largestUndimmedDetent(id identifier: PageSheet.Detent.Identifier?)
     -> some View
   {
@@ -185,6 +188,7 @@ extension View {
   /// - Parameters:
   ///   - id: A ``PageSheet.Detent.Identifier`` value, the default is `nil`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's selected `Detent` identifier.
+  @available(*, deprecated, message: "Use `sheetPreference(_:)` instead.")
   @inlinable public func selectedDetent(id identifier: PageSheet.Detent.Identifier?) -> some View {
     self.sheetPreference(.selectedDetent(id: identifier))
   }
@@ -199,6 +203,7 @@ extension View {
   /// - Parameters:
   ///  - preference: Default value is `false`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's ``prefersEdgeAttachedInCompactHeight`` property.
+  @available(*, deprecated, message: "Use `sheetPreference(_:)` instead.")
   @inlinable public func preferEdgeAttachedInCompactHeight(_ preference: Bool) -> some View {
     self.sheetPreference(.edgeAttachedInCompactHeight(preference))
   }
@@ -215,6 +220,7 @@ extension View {
   /// - Parameters:
   ///  - preference: Default value is `false`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's ``prefersEdgeAttachedInCompactHeight`` property.
+  @available(*, deprecated, message: "Use `sheetPreference(_:)` instead.")
   @inlinable public func widthFollowsPreferredContentSizeWhenEdgeAttached(_ preference: Bool)
     -> some View
   {
@@ -234,6 +240,7 @@ extension View {
   /// - Parameters:
   ///  - preference: Default value is `true`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's ``prefersScrollingExpandsWhenScrolledToEdge`` property.
+  @available(*, deprecated, message: "Use `sheetPreference(_:)` instead.")
   @inlinable public func preferScrollingExpandsWhenScrolledToEdge(_ preference: Bool) -> some View {
     self.sheetPreference(.scrollingExpandsWhenScrolledToEdge(preference))
   }
@@ -247,6 +254,7 @@ extension View {
   /// - Parameters:
   ///  - preference: Default value is `nil`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's ``cornerRadius``.
+  @available(*, deprecated, message: "Use `sheetPreference(_:)` instead.")
   @inlinable public func preferredSheetCornerRadius(_ cornerRadius: CGFloat?) -> some View {
     self.sheetPreference(.cornerRadius(cornerRadius))
   }
