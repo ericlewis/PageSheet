@@ -15,7 +15,7 @@
 - Exposes all of the [`UISheetPresentationController`](https://developer.apple.com/documentation/uikit/uisheetpresentationcontroller) configuration options.
 - Track the currently selected detent using an [`Environment`](https://developer.apple.com/documentation/swiftui/environment) value. 
 - [Well documented API](#documentation), following a similar approach to the Developer Documentation.
-- Small footprint, weighing only `34.6kB` when installed via SwiftPM.
+- Small footprint, weighing only [`~38.1kB`](https://www.emergetools.com/) when installed via SwiftPM.
 
 ## Table of Contents
 * [Requirements](#requirements)
@@ -30,7 +30,6 @@
   * [Presentation Modifiers](#presentation-modifiers)
   * [Presentation Customization Modifiers](#presentation-customization-modifiers)
   * [PageSheetView](#pagesheetview)
-* [Known Issues](#known-issues)
 * [License](#license)
 
 # Requirements
@@ -343,10 +342,6 @@ struct ContentView: View {
 - `content`: A closure that returns the content of the sheet.
 #### Returns: 
 - A presentation controller wrapped SwiftUI view.
-
-
-# Known Issues
-- Largest undimmed detent seems to affect the dimming of accent color elements in parent views.
 
 # License
 PageSheet is released under the MIT license. See [LICENSE](LICENSE.md) for details.
