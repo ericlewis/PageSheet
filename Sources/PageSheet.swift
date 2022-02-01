@@ -41,10 +41,19 @@ public enum PageSheet {
     @State
     private var configuration: Configuration = .default
 
+    @State
+    private var selectedDetent: Detent.Identifier?
+
     let content: Content
 
     var body: some View {
-      HostingView(configuration: $configuration, content: content)
+      HostingView(configuration: $configuration, selectedDetent: $selectedDetent, content: content)
+        .onChange(of: selectedDetent) { newValue in
+          self.configuration.selectedDetentIdentifier = newValue
+        }
+        .onPreferenceChange(Preference.SelectedDetentIdentifier.self) { newValue in
+          self.selectedDetent = newValue
+        }
         .onPreferenceChange(Preference.GrabberVisible.self) { newValue in
           self.configuration.prefersGrabberVisible = newValue
         }
@@ -53,9 +62,6 @@ public enum PageSheet {
         }
         .onPreferenceChange(Preference.LargestUndimmedDetentIdentifier.self) { newValue in
           self.configuration.largestUndimmedDetentIdentifier = newValue
-        }
-        .onPreferenceChange(Preference.SelectedDetentIdentifier.self) { newValue in
-          self.configuration.selectedDetentIdentifier = newValue
         }
         .onPreferenceChange(Preference.EdgeAttachedInCompactHeight.self) { newValue in
           self.configuration.prefersEdgeAttachedInCompactHeight = newValue
@@ -71,6 +77,7 @@ public enum PageSheet {
           self.configuration.preferredCornerRadius = newValue
         }
         .ignoresSafeArea()
+        .environment(\._selectedDetentIdentifier, self.selectedDetent)
     }
   }
 
@@ -82,9 +89,12 @@ public enum PageSheet {
     var configuration: Configuration = .default {
       didSet {
         if let sheet = self.sheetPresentationController {
-          sheet.delegate = self
+          if sheet.delegate == nil {
+            sheet.delegate = self
+          }
+
+          let config = self.configuration
           sheet.animateChanges {
-            let config = self.configuration
             sheet.prefersGrabberVisible = config.prefersGrabberVisible
             sheet.detents = config.detents
             sheet.largestUndimmedDetentIdentifier = config.largestUndimmedDetentIdentifier
@@ -94,70 +104,57 @@ public enum PageSheet {
             sheet.prefersScrollingExpandsWhenScrolledToEdge =
               config.prefersScrollingExpandsWhenScrolledToEdge
             sheet.preferredCornerRadius = config.preferredCornerRadius
-
-            self.selectedDetentChanged?(config.selectedDetentIdentifier)
             sheet.selectedDetentIdentifier = config.selectedDetentIdentifier
           }
         }
       }
     }
 
-    var selectedDetentChanged: ((Detent.Identifier?) -> Void)?
+    @Binding
+    var selectedDetent: Detent.Identifier?
+
+    init(rootView: Content, selectedDetent: Binding<Detent.Identifier?>) {
+      self._selectedDetent = selectedDetent
+      super.init(rootView: rootView)
+    }
+
+    @MainActor @objc required dynamic init?(coder aDecoder: NSCoder) {
+      fatalError("init(coder:) has not been implemented")
+    }
 
     // MARK: UISheetPresentationControllerDelegate
 
     func sheetPresentationControllerDidChangeSelectedDetentIdentifier(
       _ sheet: UISheetPresentationController
     ) {
-      selectedDetentChanged?(sheet.selectedDetentIdentifier)
+      self.selectedDetent = sheet.selectedDetentIdentifier
     }
   }
 
   // MARK: - HostingView
 
   fileprivate struct HostingView<Content: View>: UIViewControllerRepresentable {
-    typealias ModifiedView = ModifiedContent<
-      Content, ApplySelectedDetentEnvironmentValueViewModifier
-    >
-
     @Binding
     var configuration: Configuration
+
+    @Binding
+    var selectedDetent: Detent.Identifier?
 
     @State
     private var selectedDetentIdentifier: Detent.Identifier?
 
     let content: Content
 
-    func makeUIViewController(context: Context) -> HostingController<ModifiedView> {
+    func makeUIViewController(context: Context) -> HostingController<Content> {
       HostingController(
-        rootView: content.modifier(
-          ApplySelectedDetentEnvironmentValueViewModifier(
-            selectedDetentIdentifier: $selectedDetentIdentifier
-          )
-        )
+        rootView: content,
+        selectedDetent: $selectedDetent
       )
     }
 
-    func updateUIViewController(_ controller: HostingController<ModifiedView>, context: Context) {
-      controller.selectedDetentChanged = { newDetent in
-        // FIXME: this causes issues since it is drawing during a state update. Need to figure out how to... not do that.
-        // self.selectedDetentIdentifier = $0
-      }
+    func updateUIViewController(_ controller: HostingController<Content>, context: Context) {
       controller.configuration = configuration
-      controller.rootView = content.modifier(
-        ApplySelectedDetentEnvironmentValueViewModifier(
-          selectedDetentIdentifier: $selectedDetentIdentifier
-        )
-      )
-    }
-  }
-
-  fileprivate struct ApplySelectedDetentEnvironmentValueViewModifier: ViewModifier {
-    @Binding
-    var selectedDetentIdentifier: Detent.Identifier?
-
-    func body(content: Content) -> some View {
-      content.environment(\._selectedDetentIdentifier, selectedDetentIdentifier)
+      controller.rootView = content
     }
   }
 }
