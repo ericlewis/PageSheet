@@ -28,5 +28,6 @@ struct ContentView: View {
       }
       .navigationTitle("PageSheet")
     }
+    .navigationViewStyle(.stack)
   }
 }
