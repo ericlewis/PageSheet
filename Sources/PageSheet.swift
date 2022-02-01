@@ -5,7 +5,7 @@ import SwiftUI
 private protocol AutomaticPreferenceKey: PreferenceKey {}
 
 extension AutomaticPreferenceKey {
-  internal static func reduce(value: inout Value, nextValue: () -> Value) {
+  public static func reduce(value: inout Value, nextValue: () -> Value) {
     value = nextValue()
   }
 }
@@ -228,40 +228,42 @@ extension PageSheet {
 // MARK: Preferences
 
 extension PageSheet {
-  internal enum Preference {
-    struct GrabberVisible: AutomaticPreferenceKey {
-      static var defaultValue: Bool = Configuration.default.prefersGrabberVisible
+  public enum Preference {
+    public struct GrabberVisible: AutomaticPreferenceKey {
+      public static var defaultValue: Bool = Configuration.default.prefersGrabberVisible
     }
 
-    struct Detents: AutomaticPreferenceKey {
-      static var defaultValue: PageSheet.Detents = Configuration.default.detents
+    public struct Detents: AutomaticPreferenceKey {
+      public static var defaultValue: PageSheet.Detents = Configuration.default.detents
     }
 
-    struct LargestUndimmedDetentIdentifier: AutomaticPreferenceKey {
-      static var defaultValue: Detent.Identifier? = Configuration.default
+    public struct LargestUndimmedDetentIdentifier: AutomaticPreferenceKey {
+      public static var defaultValue: Detent.Identifier? = Configuration.default
         .largestUndimmedDetentIdentifier
     }
 
-    struct SelectedDetentIdentifier: AutomaticPreferenceKey {
-      static var defaultValue: Detent.Identifier? = Configuration.default.selectedDetentIdentifier
+    public struct SelectedDetentIdentifier: AutomaticPreferenceKey {
+      public static var defaultValue: Detent.Identifier? = Configuration.default
+        .selectedDetentIdentifier
     }
 
-    struct EdgeAttachedInCompactHeight: AutomaticPreferenceKey {
-      static var defaultValue: Bool = Configuration.default.prefersEdgeAttachedInCompactHeight
+    public struct EdgeAttachedInCompactHeight: AutomaticPreferenceKey {
+      public static var defaultValue: Bool = Configuration.default
+        .prefersEdgeAttachedInCompactHeight
     }
 
-    struct WidthFollowsPreferredContentSizeWhenEdgeAttached: AutomaticPreferenceKey {
-      static var defaultValue: Bool = Configuration.default
+    public struct WidthFollowsPreferredContentSizeWhenEdgeAttached: AutomaticPreferenceKey {
+      public static var defaultValue: Bool = Configuration.default
         .widthFollowsPreferredContentSizeWhenEdgeAttached
     }
 
-    struct ScrollingExpandsWhenScrolledToEdge: AutomaticPreferenceKey {
-      static var defaultValue: Bool = Configuration.default
+    public struct ScrollingExpandsWhenScrolledToEdge: AutomaticPreferenceKey {
+      public static var defaultValue: Bool = Configuration.default
         .prefersScrollingExpandsWhenScrolledToEdge
     }
 
-    struct CornerRadius: AutomaticPreferenceKey {
-      static var defaultValue: CGFloat? = Configuration.default.preferredCornerRadius
+    public struct CornerRadius: AutomaticPreferenceKey {
+      public static var defaultValue: CGFloat? = Configuration.default.preferredCornerRadius
     }
   }
 }

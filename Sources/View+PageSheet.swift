@@ -122,7 +122,7 @@ extension View {
 
   // MARK: Preferences
 
-  fileprivate typealias Preference = PageSheet.Preference
+  public typealias Preference = PageSheet.Preference
 
   /// Sets a Boolean value that determines whether the presenting sheet shows a grabber at the top.
   ///
@@ -137,7 +137,7 @@ extension View {
   /// - Parameters:
   ///   - isVisible: Default value is `false`, set to `true` to display grabber.
   /// - Returns: A view that wraps this view and sets the presenting sheet's grabber visiblity.
-  public func preferGrabberVisible(_ isVisible: Bool) -> some View {
+  @inlinable public func preferGrabberVisible(_ isVisible: Bool) -> some View {
     self.preference(key: Preference.GrabberVisible.self, value: isVisible)
   }
 
@@ -151,7 +151,7 @@ extension View {
   /// - Parameters:
   ///   - detents: The default value is an array that contains the value ``large()``.
   /// - Returns: A view that wraps this view and sets the presenting sheet's  ``UISheetPresentationController/detents``.
-  public func detents(_ detents: PageSheet.Detents) -> some View {
+  @inlinable public func detents(_ detents: PageSheet.Detents) -> some View {
     self.preference(key: Preference.Detents.self, value: detents)
   }
 
@@ -169,7 +169,7 @@ extension View {
   /// - Parameters:
   ///   - id: A ``PageSheet.Detent.Identifier`` value, the default is `nil`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's largest undimmed `Detent` identifier.
-  public func largestUndimmedDetent(id identifier: PageSheet.Detent.Identifier?)
+  @inlinable public func largestUndimmedDetent(id identifier: PageSheet.Detent.Identifier?)
     -> some View
   {
     self.preference(key: Preference.LargestUndimmedDetentIdentifier.self, value: identifier)
@@ -185,7 +185,7 @@ extension View {
   /// - Parameters:
   ///   - id: A ``PageSheet.Detent.Identifier`` value, the default is `nil`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's selected `Detent` identifier.
-  public func selectedDetent(id identifier: PageSheet.Detent.Identifier?) -> some View {
+  @inlinable public func selectedDetent(id identifier: PageSheet.Detent.Identifier?) -> some View {
     self.preference(key: Preference.SelectedDetentIdentifier.self, value: identifier)
   }
 
@@ -199,7 +199,7 @@ extension View {
   /// - Parameters:
   ///  - preference: Default value is `false`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's ``prefersEdgeAttachedInCompactHeight`` property.
-  public func preferEdgeAttachedInCompactHeight(_ preference: Bool) -> some View {
+  @inlinable public func preferEdgeAttachedInCompactHeight(_ preference: Bool) -> some View {
     self.preference(key: Preference.EdgeAttachedInCompactHeight.self, value: preference)
   }
 
@@ -215,7 +215,9 @@ extension View {
   /// - Parameters:
   ///  - preference: Default value is `false`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's ``prefersEdgeAttachedInCompactHeight`` property.
-  public func widthFollowsPreferredContentSizeWhenEdgeAttached(_ preference: Bool) -> some View {
+  @inlinable public func widthFollowsPreferredContentSizeWhenEdgeAttached(_ preference: Bool)
+    -> some View
+  {
     self.preference(
       key: Preference.WidthFollowsPreferredContentSizeWhenEdgeAttached.self, value: preference)
   }
@@ -233,7 +235,7 @@ extension View {
   /// - Parameters:
   ///  - preference: Default value is `true`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's ``prefersScrollingExpandsWhenScrolledToEdge`` property.
-  public func preferScrollingExpandsWhenScrolledToEdge(_ preference: Bool) -> some View {
+  @inlinable public func preferScrollingExpandsWhenScrolledToEdge(_ preference: Bool) -> some View {
     self.preference(key: Preference.ScrollingExpandsWhenScrolledToEdge.self, value: preference)
   }
 
@@ -246,7 +248,7 @@ extension View {
   /// - Parameters:
   ///  - preference: Default value is `nil`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's ``cornerRadius``.
-  public func preferredSheetCornerRadius(_ cornerRadius: CGFloat?) -> some View {
+  @inlinable public func preferredSheetCornerRadius(_ cornerRadius: CGFloat?) -> some View {
     self.preference(key: Preference.CornerRadius.self, value: cornerRadius)
   }
 }
