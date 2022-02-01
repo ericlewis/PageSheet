@@ -153,7 +153,7 @@ public enum PageSheet {
     }
 
     func updateUIViewController(_ controller: HostingController<Content>, context: Context) {
-      if controller.configuration != configuration {
+      if controller.configuration != configuration, configuration != .default {
         controller.configuration = configuration
         controller.rootView = content
 
