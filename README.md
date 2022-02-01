@@ -185,6 +185,7 @@ using the same process.
 ##### Note: You can apply these modifiers to any view in the sheet’s view hierarchy.
 ---
 
+#### ⚠️ DEPRECATED: Use `sheetPreference(_:)` instead. ⚠️
 ```swift
 func preferGrabberVisible(_ isVisible: Bool) -> some View
 ```
@@ -202,6 +203,7 @@ func preferGrabberVisible(_ isVisible: Bool) -> some View
 - A view that wraps this view and sets the presenting sheet's grabber visiblity.
 ---
 
+#### ⚠️ DEPRECATED: Use `sheetPreference(_:)` instead. ⚠️
 ```swift
 func detents(_ detents: PageSheet.Detents) -> some View
 ```
@@ -216,6 +218,7 @@ func detents(_ detents: PageSheet.Detents) -> some View
 - A view that wraps this view and sets the presenting sheet's  ``UISheetPresentationController/detents``.
 ---
 
+#### ⚠️ DEPRECATED: Use `sheetPreference(_:)` instead. ⚠️
 ```swift
 func largestUndimmedDetent(id identifier: PageSheet.Detent.Identifier?) -> some View
 ```
@@ -234,6 +237,7 @@ func largestUndimmedDetent(id identifier: PageSheet.Detent.Identifier?) -> some 
 - A view that wraps this view and sets the presenting sheet's largest undimmed `Detent` identifier.
 ---
 
+#### ⚠️ DEPRECATED: Use `sheetPreference(_:)` instead. ⚠️
 ```swift
 func selectedDetent(id identifier: PageSheet.Detent.Identifier?) -> some View
 ```
@@ -248,6 +252,7 @@ func selectedDetent(id identifier: PageSheet.Detent.Identifier?) -> some View
 - A view that wraps this view and sets the presenting sheet's selected `Detent` identifier.
 ---
 
+#### ⚠️ DEPRECATED: Use `sheetPreference(_:)` instead. ⚠️
 ```swift
 func preferEdgeAttachedInCompactHeight(_ preference: Bool) -> some View
 ```
@@ -262,6 +267,7 @@ func preferEdgeAttachedInCompactHeight(_ preference: Bool) -> some View
 - A view that wraps this view and sets the presenting sheet's ``prefersEdgeAttachedInCompactHeight`` property.
 ---
 
+#### ⚠️ DEPRECATED: Use `sheetPreference(_:)` instead. ⚠️
 ```swift
 func widthFollowsPreferredContentSizeWhenEdgeAttached(_ preference: Bool) -> some View
 ```
@@ -278,6 +284,7 @@ func widthFollowsPreferredContentSizeWhenEdgeAttached(_ preference: Bool) -> som
 - A view that wraps this view and sets the presenting sheet's ``prefersEdgeAttachedInCompactHeight`` property.
 ---
 
+#### ⚠️ DEPRECATED: Use `sheetPreference(_:)` instead. ⚠️
 ```swift
 func preferScrollingExpandsWhenScrolledToEdge(_ preference: Bool) -> some View
 ```
@@ -295,6 +302,7 @@ func preferScrollingExpandsWhenScrolledToEdge(_ preference: Bool) -> some View
 - A view that wraps this view and sets the presenting sheet's ``prefersScrollingExpandsWhenScrolledToEdge`` property.
 ---
 
+#### ⚠️ DEPRECATED: Use `sheetPreference(_:)` instead. ⚠️
 ```swift
 func preferredSheetCornerRadius(_ cornerRadius: CGFloat?) -> some View
 ```
