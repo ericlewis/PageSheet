@@ -225,7 +225,7 @@ extension PageSheet {
 
 }
 
-// MARK: Preferences
+// MARK: Preference
 
 extension PageSheet {
   public enum Preference {
@@ -264,6 +264,117 @@ extension PageSheet {
 
     public struct CornerRadius: AutomaticPreferenceKey {
       public static var defaultValue: CGFloat? = Configuration.default.preferredCornerRadius
+    }
+  }
+}
+
+// MARK: - PresentationPreference
+
+extension PageSheet {
+
+  // MARK: - Enum
+
+  /// The set of preferences that can be applied to a sheet presentation.
+  @frozen public enum PresentationPreference: Hashable {
+    /// Sets a Boolean value that determines whether the presenting sheet shows a grabber at the top.
+    ///
+    /// The default value is `false`, which means the sheet doesn't show a grabber. A *grabber* is a visual affordance that indicates that a sheet is resizable.
+    /// Showing a grabber may be useful when it isn't apparent that a sheet can resize or when the sheet can't dismiss interactively.
+    ///
+    /// Set this value to `true` for the system to draw a grabber in the standard system-defined location.
+    /// The system automatically hides the grabber at appropriate times, like when the sheet is full screen in a compact-height size class or when another sheet presents on top of it.
+    ///
+    case grabberVisible(Bool)
+
+    /// Sets an array of heights where the presenting sheet can rest.
+    ///
+    /// The default value is an array that contains the value ``large()``.
+    /// The array must contain at least one element. When you set this value, specify detents in order from smallest to largest height.
+    ///
+    case detents(Detents)
+
+    /// Sets the largest detent that doesn’t dim the view underneath the presenting sheet.
+    ///
+    /// The default value is `nil`, which means the system adds a noninteractive dimming view underneath the sheet at all detents.
+    /// Set this property to only add the dimming view at detents larger than the detent you specify.
+    /// For example, set this property to ``medium`` to add the dimming view at the ``large`` detent.
+    ///
+    /// Without a dimming view, the undimmed area around the sheet responds to user interaction, allowing for a nonmodal experience.
+    /// You can use this behavior for sheets with interactive content underneath them.
+    ///
+    case largestUndimmedDetent(id: Detent.Identifier?)
+
+    /// Sets the identifier of the most recently selected detent on the presenting sheet.
+    ///
+    /// This property represents the most recent detent that the user selects or that you set programmatically.
+    /// The default value is `nil`, which means the sheet displays at the smallest detent you specify in ``detents``.
+    ///
+    case selectedDetent(id: Detent.Identifier?)
+
+    /// Sets a Boolean value that determines whether the presenting sheet attaches to the bottom edge of the screen in a compact-height size class.
+    ///
+    /// The default value is `false`, which means the sheet defaults to a full screen appearance at compact height.
+    /// Set this value to `true` to use an alternate appearance in a compact-height size class, causing the sheet to only attach to the screen on its bottom edge.
+    ///
+    case edgeAttachedInCompactHeight(Bool)
+
+    /// Sets a Boolean value that determines whether the presenting sheet's width matches its view's preferred content size.
+    ///
+    /// The default value is `false`, which means the sheet's width equals the width of its container's safe area.
+    /// Set this value to `true` to use your view controller's ``preferredContentSize`` to determine the width of the sheet instead.
+    ///
+    /// This property doesn't have an effect when the sheet is in a compact-width and regular-height size class, or when ``prefersEdgeAttachedInCompactHeight`` is `false`.
+    ///
+    case widthFollowsPreferredContentSizeWhenEdgeAttached(Bool)
+
+    /// Sets a Boolean value that determines whether scrolling expands the presenting sheet to a larger detent.
+    ///
+    /// The default value is `true`, which means if the sheet can expand to a larger detent than ``selectedDetentIdentifier``,
+    /// scrolling up in the sheet increases its detent instead of scrolling the sheet's content. After the sheet reaches its largest detent, scrolling begins.
+    ///
+    /// Set this value to `false` if you want to avoid letting a scroll gesture expand the sheet.
+    /// For example, you can set this value on a nonmodal sheet to avoid obscuring the content underneath the sheet.
+    ///
+    case scrollingExpandsWhenScrolledToEdge(Bool)
+
+    /// Sets the preferred corner radius on the presenting sheet.
+    ///
+    /// The default value is `nil`. This property only has an effect when the presenting sheet is at the front of its sheet stack.
+    ///
+    case cornerRadius(CGFloat?)
+  }
+
+  // MARK: PresentationPreferenceViewModifier
+
+  /// Applies a provided presentation preference and returns a new view.
+  public struct PresentationPreferenceViewModifier: ViewModifier {
+    public let preference: PresentationPreference
+
+    @inlinable public func body(content: Content) -> some View {
+      switch preference {
+      case let .cornerRadius(value):
+        content.preference(key: Preference.CornerRadius.self, value: value)
+      case let .detents(value):
+        content.preference(key: Preference.Detents.self, value: value)
+      case let .largestUndimmedDetent(value):
+        content.preference(key: Preference.LargestUndimmedDetentIdentifier.self, value: value)
+      case let .selectedDetent(value):
+        content.preference(key: Preference.SelectedDetentIdentifier.self, value: value)
+      case let .edgeAttachedInCompactHeight(value):
+        content.preference(key: Preference.EdgeAttachedInCompactHeight.self, value: value)
+      case let .widthFollowsPreferredContentSizeWhenEdgeAttached(value):
+        content.preference(
+          key: Preference.WidthFollowsPreferredContentSizeWhenEdgeAttached.self, value: value)
+      case let .grabberVisible(value):
+        content.preference(key: Preference.GrabberVisible.self, value: value)
+      case let .scrollingExpandsWhenScrolledToEdge(value):
+        content.preference(key: Preference.ScrollingExpandsWhenScrolledToEdge.self, value: value)
+      }
+    }
+
+    /// Creates a modifier for a given preference.
+    @inlinable public init(_ preference: PageSheet.PresentationPreference) {
+      self.preference = preference
     }
   }
 }

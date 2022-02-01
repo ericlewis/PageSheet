@@ -138,7 +138,7 @@ extension View {
   ///   - isVisible: Default value is `false`, set to `true` to display grabber.
   /// - Returns: A view that wraps this view and sets the presenting sheet's grabber visiblity.
   @inlinable public func preferGrabberVisible(_ isVisible: Bool) -> some View {
-    self.preference(key: Preference.GrabberVisible.self, value: isVisible)
+    self.sheetPreference(.grabberVisible(isVisible))
   }
 
   /// Sets an array of heights where the presenting sheet can rest.
@@ -152,7 +152,7 @@ extension View {
   ///   - detents: The default value is an array that contains the value ``large()``.
   /// - Returns: A view that wraps this view and sets the presenting sheet's  ``UISheetPresentationController/detents``.
   @inlinable public func detents(_ detents: PageSheet.Detents) -> some View {
-    self.preference(key: Preference.Detents.self, value: detents)
+    self.sheetPreference(.detents(detents))
   }
 
   /// Sets the largest detent that doesn’t dim the view underneath the presenting sheet.
@@ -172,7 +172,7 @@ extension View {
   @inlinable public func largestUndimmedDetent(id identifier: PageSheet.Detent.Identifier?)
     -> some View
   {
-    self.preference(key: Preference.LargestUndimmedDetentIdentifier.self, value: identifier)
+    self.sheetPreference(.largestUndimmedDetent(id: identifier))
   }
 
   /// Sets the identifier of the most recently selected detent on the presenting sheet.
@@ -186,7 +186,7 @@ extension View {
   ///   - id: A ``PageSheet.Detent.Identifier`` value, the default is `nil`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's selected `Detent` identifier.
   @inlinable public func selectedDetent(id identifier: PageSheet.Detent.Identifier?) -> some View {
-    self.preference(key: Preference.SelectedDetentIdentifier.self, value: identifier)
+    self.sheetPreference(.selectedDetent(id: identifier))
   }
 
   /// Sets a Boolean value that determines whether the presenting sheet attaches to the bottom edge of the screen in a compact-height size class.
@@ -200,7 +200,7 @@ extension View {
   ///  - preference: Default value is `false`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's ``prefersEdgeAttachedInCompactHeight`` property.
   @inlinable public func preferEdgeAttachedInCompactHeight(_ preference: Bool) -> some View {
-    self.preference(key: Preference.EdgeAttachedInCompactHeight.self, value: preference)
+    self.sheetPreference(.edgeAttachedInCompactHeight(preference))
   }
 
   /// Sets a Boolean value that determines whether the presenting sheet's width matches its view's preferred content size.
@@ -218,8 +218,7 @@ extension View {
   @inlinable public func widthFollowsPreferredContentSizeWhenEdgeAttached(_ preference: Bool)
     -> some View
   {
-    self.preference(
-      key: Preference.WidthFollowsPreferredContentSizeWhenEdgeAttached.self, value: preference)
+    self.sheetPreference(.widthFollowsPreferredContentSizeWhenEdgeAttached(preference))
   }
 
   /// Sets a Boolean value that determines whether scrolling expands the presenting sheet to a larger detent.
@@ -236,7 +235,7 @@ extension View {
   ///  - preference: Default value is `true`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's ``prefersScrollingExpandsWhenScrolledToEdge`` property.
   @inlinable public func preferScrollingExpandsWhenScrolledToEdge(_ preference: Bool) -> some View {
-    self.preference(key: Preference.ScrollingExpandsWhenScrolledToEdge.self, value: preference)
+    self.sheetPreference(.scrollingExpandsWhenScrolledToEdge(preference))
   }
 
   /// Sets the preferred corner radius on the presenting sheet.
@@ -249,6 +248,25 @@ extension View {
   ///  - preference: Default value is `nil`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's ``cornerRadius``.
   @inlinable public func preferredSheetCornerRadius(_ cornerRadius: CGFloat?) -> some View {
-    self.preference(key: Preference.CornerRadius.self, value: cornerRadius)
+    self.sheetPreference(.cornerRadius(cornerRadius))
+  }
+
+  /// Sets the presenting sheet's preferences using the provided preference.
+  ///
+  ///  Applies a ``PageSheet/PageSheet/PresentationPreference`` to the view.
+  ///  Use this modifier instead of the modifiers that apply directly to a view. This aids in creating consistency
+  ///  and discoverability when setting a sheet's presentation preferences.
+  ///
+  /// - Note: This modifier only takes effect when this view is inside of and visible within a presented ``PageSheet``. You can apply the modifier to any view in the sheet’s view hierarchy.
+  ///
+  /// - Parameters:
+  ///   - preference: A preference that can be applied to the current sheet presentation.
+  ///
+  /// - Returns: A view that has the given preference applied.
+  ///
+  @inlinable public func sheetPreference(_ preference: PageSheet.PresentationPreference)
+    -> some View
+  {
+    self.modifier(PageSheet.PresentationPreferenceViewModifier(preference))
   }
 }

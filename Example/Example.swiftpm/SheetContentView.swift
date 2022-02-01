@@ -64,7 +64,7 @@ struct SheetContentView: View {
         Section {
           Button("Large detent only") { detents = [.large()] }
           Button("Medium detent only") { detents = [.medium()] }
-          Button("Large & medium detent") { detents = [.medium(), .large()] }
+          Button("Medium & Large detent") { detents = [.medium(), .large()] }
         } header: {
           Text("Supported Detents")
         }
@@ -92,13 +92,14 @@ struct SheetContentView: View {
       .navigationTitle("Sheet View")
       .navigationBarTitleDisplayMode(.inline)
       .interactiveDismissDisabled(dismissDisabled)
-      .detents(detents)
-      .preferGrabberVisible(grabberVisible)
-      .selectedDetent(id: selectedDetentId)
-      .preferScrollingExpandsWhenScrolledToEdge(prefersScrollingExpandsWhenScrolledToEdge)
-      .preferEdgeAttachedInCompactHeight(prefersEdgeAttachedInCompactHeight)
-      .widthFollowsPreferredContentSizeWhenEdgeAttached(widthFollowsPreferredContentSizeWhenEdgeAttached)
-      .largestUndimmedDetent(id: largestUndimmedDetentId)
+      .sheetPreference(.detents(detents))
+      .sheetPreference(.grabberVisible(grabberVisible))
+      .sheetPreference(.selectedDetent(id: selectedDetentId))
+      .sheetPreference(.largestUndimmedDetent(id: largestUndimmedDetentId))
+      .sheetPreference(.scrollingExpandsWhenScrolledToEdge(prefersScrollingExpandsWhenScrolledToEdge))
+      .sheetPreference(.edgeAttachedInCompactHeight(prefersEdgeAttachedInCompactHeight))
+      .sheetPreference(.widthFollowsPreferredContentSizeWhenEdgeAttached(widthFollowsPreferredContentSizeWhenEdgeAttached))
+      .sheetPreference(.largestUndimmedDetent(id: largestUndimmedDetentId))
     }
     .pageSheet(isPresented: $childPresented) {
       SheetContentView()
