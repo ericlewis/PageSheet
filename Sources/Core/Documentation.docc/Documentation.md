@@ -1,4 +1,4 @@
-# ``PageSheet``
+# ``PageSheetCore``
 
  Customizable sheet presentations in SwiftUI. 
 
@@ -12,7 +12,7 @@
 - Exposes all of the [`UISheetPresentationController`](https://developer.apple.com/documentation/uikit/uisheetpresentationcontroller) configuration options.
 - Track the currently selected detent using an [`Environment`](https://developer.apple.com/documentation/swiftui/environment) value. 
 - Well documented API, following a similar approach to the Developer Documentation.
-- Small footprint, weighing only [`~38.1kB`](https://www.emergetools.com/) when installed via SwiftPM.
+- Small footprint, weighing only [`~44.0kB`](https://www.emergetools.com/) when installed via SwiftPM.
 
 ## Topics
 
@@ -24,5 +24,5 @@
 - ``PageSheetView``
 
 ### Supporting Types
-- ``PageSheet/PageSheet``
+- ``PageSheet``
 - ``PageSheet/Preference``

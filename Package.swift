@@ -10,7 +10,10 @@ let package = Package(
   products: [
     .library(
       name: "PageSheet",
-      targets: ["PageSheet"]),
+      targets: ["PageSheetCore", "PageSheetPlus"]),
+    .library(
+      name: "PageSheetCore",
+      targets: ["PageSheetCore"]),
     .library(
       name: "PageSheetPlus",
       targets: ["PageSheetPlus"]),
@@ -22,13 +25,13 @@ let package = Package(
   ],
   targets: [
     .target(
-      name: "PageSheet",
+      name: "PageSheetCore",
       dependencies: [],
       path: "./Sources/Core"),
     .target(
       name: "PageSheetPlus",
       dependencies: [
-        "PageSheet",
+        "PageSheetCore",
         "ViewModifierBuilder",
       ]
     ),

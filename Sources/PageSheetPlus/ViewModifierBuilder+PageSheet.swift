@@ -1,5 +1,5 @@
 #if canImport(ViewModifierBuilder)
-  import PageSheet
+  import PageSheetCore
   import SwiftUI
   import ViewModifierBuilder
 
