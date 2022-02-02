@@ -11,6 +11,9 @@ let package = Package(
     .library(
       name: "PageSheet",
       targets: ["PageSheet"]),
+    .library(
+      name: "PageSheetPlus",
+      targets: ["PageSheetPlus"]),
   ],
   dependencies: [
     .package(
@@ -20,9 +23,14 @@ let package = Package(
   targets: [
     .target(
       name: "PageSheet",
+      dependencies: [],
+      path: "./Sources/Core"),
+    .target(
+      name: "PageSheetPlus",
       dependencies: [
+        "PageSheet",
         "ViewModifierBuilder"
-      ],
-      path: "./Sources")
+      ]
+    )
   ]
 )

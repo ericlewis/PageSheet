@@ -35,13 +35,14 @@ let package = Package(
         )
     ],
     dependencies: [
-      .package(name: "PageSheet", path: "../../"),
+        .package(path: "../../"),
     ],
     targets: [
         .executableTarget(
             name: "AppModule",
             dependencies: [
-              "PageSheet"
+                "PageSheet",
+                .product(name: "PageSheetPlus", package: "PageSheet")
             ],
             path: "."
         )
