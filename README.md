@@ -29,8 +29,8 @@
   * [Customization](#customization)
 * [Module Documentation](#module-documentation)
   * [PageSheet](#pagesheet)
-  * [PageSheetCore](https://core-iota.vercel.app/documentation/)
-  * [PageSheetPlus](https://page-sheet-doc-website.vercel.app/documentation/)
+  * [PageSheetCore](https://pagesheetcore.swifty.sh/documentation/)
+  * [PageSheetPlus](https://pagesheetplus.swifty.sh/documentation/)
 * [License](#license)
 
 # Requirements
@@ -149,8 +149,8 @@ and `PageSheetPlus` providing a new modifier called `sheetPreferences(_:)`.
 The namesake module is `PageSheet`, which combines `PageSheetCore` & `PageSheetPlus` into a single import.
 
 If you want to only use PageSheet without the fancy extra modifier (and [extra dependency](https://github.com/ericlewis/ViewModifierBuilder)), then use `PageSheetCore`.
-### [PageSheetCore](https://core-iota.vercel.app/documentation/)
-### [PageSheetPlus](https://page-sheet-doc-website.vercel.app/documentation/)
+### [PageSheetCore](https://pagesheetcore.swifty.sh/documentation/)
+### [PageSheetPlus](https://pagesheetplus.swifty.sh/documentation/)
 
 # License
 PageSheet is released under the MIT license. See [LICENSE](LICENSE.md) for details.
