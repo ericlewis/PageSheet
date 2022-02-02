@@ -1,5 +1,6 @@
 # PageSheet
 
+[![](https://img.shields.io/badge/Swift_Package_Manager-compatible-ed702d.svg?style=flat)](https://github.com/apple/swift-package-manager)
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fericlewis%2FPageSheet%2Fbadge%3Ftype%3Dswift-versions)](https://swiftpackageindex.com/ericlewis/PageSheet)
 [![](https://img.shields.io/endpoint?url=https%3A%2F%2Fswiftpackageindex.com%2Fapi%2Fpackages%2Fericlewis%2FPageSheet%2Fbadge%3Ftype%3Dplatforms)](https://swiftpackageindex.com/ericlewis/PageSheet)
 
