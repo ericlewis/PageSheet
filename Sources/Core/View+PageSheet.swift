@@ -169,7 +169,7 @@ extension View {
   /// - Note: This modifier only takes effect when this view is inside of and visible within a presented ``PageSheet``. You can apply the modifier to any view in the sheet’s view hierarchy.
   ///
   /// - Parameters:
-  ///   - id: A ``PageSheet.Detent.Identifier`` value, the default is `nil`.
+  ///   - id: A ``PageSheetCore/PageSheet/Detent`` Identifier value, the default is `nil`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's largest undimmed `Detent` identifier.
   @available(*, deprecated, message: "Use `sheetPreference(_:)` instead.")
   @inlinable public func largestUndimmedDetent(id identifier: PageSheet.Detent.Identifier?)
@@ -186,7 +186,7 @@ extension View {
   /// - Note: This modifier only takes effect when this view is inside of and visible within a presented ``PageSheet``. You can apply the modifier to any view in the sheet’s view hierarchy.
   ///
   /// - Parameters:
-  ///   - id: A ``PageSheet.Detent.Identifier`` value, the default is `nil`.
+  ///   - id: A ``PageSheet/Detent`` Identifier value, the default is `nil`.
   /// - Returns: A view that wraps this view and sets the presenting sheet's selected `Detent` identifier.
   @available(*, deprecated, message: "Use `sheetPreference(_:)` instead.")
   @inlinable public func selectedDetent(id identifier: PageSheet.Detent.Identifier?) -> some View {
@@ -261,7 +261,7 @@ extension View {
 
   /// Sets the presenting sheet's preferences using the provided preference.
   ///
-  ///  Applies a ``PageSheet/PresentationPreference`` to the view.
+  ///  Applies a ``PageSheetCore/SheetPreference`` to the view.
   ///  Use this modifier instead of the modifiers that apply directly to a view. This aids in creating consistency
   ///  and discoverability when setting a sheet's presentation preferences.
   ///

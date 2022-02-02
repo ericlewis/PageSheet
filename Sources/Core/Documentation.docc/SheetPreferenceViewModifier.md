@@ -1,4 +1,4 @@
-#  ``PageSheet/SheetPreferenceViewModifier``
+#  ``PageSheetCore/SheetPreferenceViewModifier``
 
 ## Topics
 

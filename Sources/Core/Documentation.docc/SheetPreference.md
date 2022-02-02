@@ -1,4 +1,4 @@
-# ``PageSheet/SheetPreference``
+# ``PageSheetCore/SheetPreference``
 
 ``SheetPreference`` is a bridge to the configuration used in [`UISheetPresentationController`](https://developer.apple.com/documentation/uikit/uisheetpresentationcontroller).
 
@@ -33,7 +33,7 @@ struct ContentView: View {
 ### Specifying the Height
 - ``detents(_:)``
 - ``selectedDetent(id:)``
-- ``PageSheet/PageSheet/Detent``
+- ``PageSheet/Detent``
 
 ### Managing User Interaction
 - ``largestUndimmedDetent(id:)``

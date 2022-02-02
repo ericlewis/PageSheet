@@ -303,7 +303,7 @@ extension PageSheet {
   ///
   /// This property represents the most recent detent that the user selects or that you set programmatically.
   /// The default value is `nil`, which means the sheet displays at the smallest detent you specify in [`detents`](https://developer.apple.com/documentation/uikit/uisheetpresentationcontroller/3801903-detents).
-  /// Detents can be modified using the ``PageSheet/SheetPreference/detents(_:)`` sheet preference.
+  /// Detents can be modified using the ``PageSheetCore/SheetPreference/detents(_:)`` sheet preference.
   ///
   case selectedDetent(id: PageSheet.Detent.Identifier?)
 
@@ -320,7 +320,7 @@ extension PageSheet {
   /// Set this value to `true` to use your view controller's [`preferredContentSize`](https://developer.apple.com/documentation/uikit/uiviewcontroller/1621476-preferredcontentsize) to determine the width of the sheet instead.
   ///
   /// This property doesn't have an effect when the sheet is in a compact-width and regular-height size class, or when [`prefersEdgeAttachedInCompactHeight`](https://developer.apple.com/documentation/uikit/uisheetpresentationcontroller/3801907-prefersscrollingexpandswhenscrol) is `false`.
-  /// The scroll expansion preference can be modified using the ``PageSheet/SheetPreference/scrollingExpandsWhenScrolledToEdge(_:)`` sheet preference.
+  /// The scroll expansion preference can be modified using the ``PageSheetCore/SheetPreference/scrollingExpandsWhenScrolledToEdge(_:)`` sheet preference.
   ///
   case widthFollowsPreferredContentSizeWhenEdgeAttached(Bool)
 
@@ -341,7 +341,7 @@ extension PageSheet {
   case cornerRadius(CGFloat?)
 }
 
-/// Applies a ``PageSheet/SheetPreference`` and returns a new view.
+/// Applies a ``PageSheetCore/SheetPreference`` and returns a new view.
 ///
 /// You can use this modifier directly or preferably the convenience modifier `sheetPreference(_:)`:
 ///
@@ -389,7 +389,7 @@ public struct SheetPreferenceViewModifier: ViewModifier {
     }
   }
 
-  /// A structure that defines the ``PageSheet/SheetPreference`` needed to produce a new view with that preference applied.
+  /// A structure that defines the ``PageSheetCore/SheetPreference`` needed to produce a new view with that preference applied.
   @inlinable public init(_ preference: SheetPreference) {
     self.preference = preference
   }

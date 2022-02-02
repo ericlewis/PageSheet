@@ -1,10 +1,13 @@
-#  ``PageSheetCore/PageSheetView``
+# ``PageSheetPlus``
 
-### Example
+Contains the integration with ``ViewModifierBuilder`` to create the ``sheetPrefrences(_:)`` modifier.
+
+## Example
 
 ```swift
 import SwiftUI
 import PageSheet
+import PageSheetPlus
 
 struct ContentView: View {
   @State
@@ -21,12 +24,12 @@ struct ContentView: View {
         VStack {
           Text("Hello, world!")
         }
-        .sheetPreference(.detents([.medium(), .large()]))
-        .sheetPreference(.grabberVisible(true))
+        .sheetPreferences {
+          .detents([.medium(), .large()]);
+          .grabberVisible(true);
+        }
       }
     }
   }
 }
 ```
-
-## Topics
