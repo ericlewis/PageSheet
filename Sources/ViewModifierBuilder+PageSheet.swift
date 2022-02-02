@@ -1,3 +1,4 @@
+#if canImport(ViewModifierBuilder)
 import SwiftUI
 import ViewModifierBuilder
 
@@ -14,3 +15,4 @@ extension View {
     self.modifier(preferences())
   }
 }
+#endif
