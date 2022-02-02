@@ -12,11 +12,17 @@ let package = Package(
       name: "PageSheet",
       targets: ["PageSheet"]),
   ],
-  dependencies: [],
+  dependencies: [
+    .package(
+      name: "ViewModifierBuilder",
+      url: "https://github.com/ericlewis/ViewModifierBuilder", .upToNextMajor(from: "0.1.0"))
+  ],
   targets: [
     .target(
       name: "PageSheet",
-      dependencies: [],
+      dependencies: [
+        "ViewModifierBuilder"
+      ],
       path: "./Sources")
   ]
 )

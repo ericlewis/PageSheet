@@ -6,7 +6,7 @@ struct SheetContentView: View {
   private var dismiss
   
   @State
-  private var detents: PageSheet.Detents = [.medium(), .large()]
+  private var detents: [PageSheet.Detent] = [.medium(), .large()]
   
   @State
   private var grabberVisible = true
@@ -92,14 +92,16 @@ struct SheetContentView: View {
       .navigationTitle("Sheet View")
       .navigationBarTitleDisplayMode(.inline)
       .interactiveDismissDisabled(dismissDisabled)
-      .sheetPreference(.detents(detents))
-      .sheetPreference(.grabberVisible(grabberVisible))
-      .sheetPreference(.selectedDetent(id: selectedDetentId))
-      .sheetPreference(.largestUndimmedDetent(id: largestUndimmedDetentId))
-      .sheetPreference(.scrollingExpandsWhenScrolledToEdge(prefersScrollingExpandsWhenScrolledToEdge))
-      .sheetPreference(.edgeAttachedInCompactHeight(prefersEdgeAttachedInCompactHeight))
-      .sheetPreference(.widthFollowsPreferredContentSizeWhenEdgeAttached(widthFollowsPreferredContentSizeWhenEdgeAttached))
-      .sheetPreference(.largestUndimmedDetent(id: largestUndimmedDetentId))
+      .sheetPreferences {
+        .detents(detents);
+        .grabberVisible(grabberVisible);
+        .selectedDetent(id: selectedDetentId);
+        .largestUndimmedDetent(id: largestUndimmedDetentId);
+        .scrollingExpandsWhenScrolledToEdge(prefersScrollingExpandsWhenScrolledToEdge);
+        .edgeAttachedInCompactHeight(prefersEdgeAttachedInCompactHeight);
+        .widthFollowsPreferredContentSizeWhenEdgeAttached(widthFollowsPreferredContentSizeWhenEdgeAttached);
+        .largestUndimmedDetent(id: largestUndimmedDetentId);
+      }
     }
     .pageSheet(isPresented: $childPresented) {
       SheetContentView()

@@ -1,0 +1,16 @@
+{
+  "object": {
+    "pins": [
+      {
+        "package": "ViewModifierBuilder",
+        "repositoryURL": "https://github.com/ericlewis/ViewModifierBuilder",
+        "state": {
+          "branch": null,
+          "revision": "fd502e33819caac97ee8321aaedfe7506e811794",
+          "version": "0.1.0"
+        }
+      }
+    ]
+  },
+  "version": 1
+}

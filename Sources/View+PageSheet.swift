@@ -153,7 +153,7 @@ extension View {
   ///   - detents: The default value is an array that contains the value ``large()``.
   /// - Returns: A view that wraps this view and sets the presenting sheet's  ``UISheetPresentationController/detents``.
   @available(*, deprecated, message: "Use `sheetPreference(_:)` instead.")
-  @inlinable public func detents(_ detents: PageSheet.Detents) -> some View {
+  @inlinable public func detents(_ detents: [PageSheet.Detent]) -> some View {
     self.sheetPreference(.detents(detents))
   }
 
@@ -261,7 +261,7 @@ extension View {
 
   /// Sets the presenting sheet's preferences using the provided preference.
   ///
-  ///  Applies a ``PageSheet/PageSheet/PresentationPreference`` to the view.
+  ///  Applies a ``PageSheet/PresentationPreference`` to the view.
   ///  Use this modifier instead of the modifiers that apply directly to a view. This aids in creating consistency
   ///  and discoverability when setting a sheet's presentation preferences.
   ///
@@ -272,9 +272,9 @@ extension View {
   ///
   /// - Returns: A view that has the given preference applied.
   ///
-  @inlinable public func sheetPreference(_ preference: PageSheet.PresentationPreference)
-    -> some View
+  @inlinable public func sheetPreference(_ preference: SheetPreference)
+    -> ModifiedContent<Self, SheetPreferenceViewModifier>
   {
-    self.modifier(PageSheet.PresentationPreferenceViewModifier(preference))
+    self.modifier(SheetPreferenceViewModifier(preference))
   }
 }
