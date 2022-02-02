@@ -1,6 +1,6 @@
 Pod::Spec.new do |s|
   s.name         = "PageSheet"
-  s.version      = "1.2.1"
+  s.version      = "1.2.3"
   s.summary      = "Customizable sheets using UISheetPresentationController in SwiftUI."
   s.description  = <<-DESC
     Customizable sheet presentations in SwiftUI. Using UISheetPresentationController under the hood.
