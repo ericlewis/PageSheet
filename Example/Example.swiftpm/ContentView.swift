@@ -1,10 +1,10 @@
-import SwiftUI
 import PageSheet
+import SwiftUI
 
 struct ContentView: View {
   @State
   private var sheetPresented = false
-  
+
   var body: some View {
     NavigationView {
       List {
@@ -13,12 +13,12 @@ struct ContentView: View {
             sheetPresented = true
           }
           .disabled(sheetPresented)
-          
+
           Button("Close Sheet") {
             sheetPresented = false
           }
           .disabled(!sheetPresented)
-          
+
         } header: {
           Text("Actions")
         }

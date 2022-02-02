@@ -29,8 +29,8 @@ let package = Package(
       name: "PageSheetPlus",
       dependencies: [
         "PageSheet",
-        "ViewModifierBuilder"
+        "ViewModifierBuilder",
       ]
-    )
+    ),
   ]
 )

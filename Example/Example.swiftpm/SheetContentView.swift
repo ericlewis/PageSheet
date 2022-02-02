@@ -1,41 +1,41 @@
-import SwiftUI
 import PageSheet
 import PageSheetPlus
+import SwiftUI
 
 struct SheetContentView: View {
   @Environment(\.dismiss)
   private var dismiss
-  
+
   @State
   private var detents: [PageSheet.Detent] = [.medium(), .large()]
-  
+
   @State
   private var grabberVisible = true
-  
+
   @State
   private var dismissDisabled = false
-  
+
   @State
   private var childPresented = false
-  
+
   @State
   private var prefersScrollingExpandsWhenScrolledToEdge = true
-  
+
   @State
   private var prefersEdgeAttachedInCompactHeight = false
-  
+
   @State
   private var widthFollowsPreferredContentSizeWhenEdgeAttached = false
-  
+
   @State
   private var selectedDetentId: PageSheet.Detent.Identifier? = nil
-  
+
   @State
   private var largestUndimmedDetentId: PageSheet.Detent.Identifier? = nil
-  
+
   @Environment(\.selectedDetentIdentifier)
   private var selectedDetent
-  
+
   var body: some View {
     NavigationView {
       List {
@@ -56,9 +56,13 @@ struct SheetContentView: View {
         Section {
           Toggle("Grabber visible", isOn: $grabberVisible)
           Toggle("Dismiss disabled", isOn: $dismissDisabled)
-          Toggle("Scrolling expands when scrolled to edge", isOn: $prefersScrollingExpandsWhenScrolledToEdge)
+          Toggle(
+            "Scrolling expands when scrolled to edge",
+            isOn: $prefersScrollingExpandsWhenScrolledToEdge)
           Toggle("Edge attached in compact height", isOn: $prefersEdgeAttachedInCompactHeight)
-          Toggle("Width follows preferred content size when edge attached", isOn: $widthFollowsPreferredContentSizeWhenEdgeAttached)
+          Toggle(
+            "Width follows preferred content size when edge attached",
+            isOn: $widthFollowsPreferredContentSizeWhenEdgeAttached)
         } header: {
           Text("Toggles")
         }
@@ -94,14 +98,15 @@ struct SheetContentView: View {
       .navigationBarTitleDisplayMode(.inline)
       .interactiveDismissDisabled(dismissDisabled)
       .sheetPreferences {
-        .detents(detents);
-        .grabberVisible(grabberVisible);
-        .selectedDetent(id: selectedDetentId);
-        .largestUndimmedDetent(id: largestUndimmedDetentId);
-        .scrollingExpandsWhenScrolledToEdge(prefersScrollingExpandsWhenScrolledToEdge);
-        .edgeAttachedInCompactHeight(prefersEdgeAttachedInCompactHeight);
-        .widthFollowsPreferredContentSizeWhenEdgeAttached(widthFollowsPreferredContentSizeWhenEdgeAttached);
-        .largestUndimmedDetent(id: largestUndimmedDetentId);
+        .detents(detents)
+        .grabberVisible(grabberVisible)
+        .selectedDetent(id: selectedDetentId)
+        .largestUndimmedDetent(id: largestUndimmedDetentId)
+        .scrollingExpandsWhenScrolledToEdge(prefersScrollingExpandsWhenScrolledToEdge)
+        .edgeAttachedInCompactHeight(prefersEdgeAttachedInCompactHeight)
+        .widthFollowsPreferredContentSizeWhenEdgeAttached(
+          widthFollowsPreferredContentSizeWhenEdgeAttached)
+        .largestUndimmedDetent(id: largestUndimmedDetentId)
       }
     }
     .pageSheet(isPresented: $childPresented) {
@@ -109,4 +114,3 @@ struct SheetContentView: View {
     }
   }
 }
-
