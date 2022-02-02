@@ -1,6 +1,6 @@
 # ``PageSheetPlus``
 
-Contains the integration with ``ViewModifierBuilder`` to create the ``sheetPrefrences(_:)`` modifier.
+Contains the integration with ``ViewModifierBuilder`` to create the ``sheetPreferences(_:)`` modifier.
 
 ## Example
 
@@ -33,3 +33,6 @@ struct ContentView: View {
   }
 }
 ```
+
+### Open Source
+Check out the [GitHub Repo](https://github.com/ericlewis/PageSheet) to see how everything works.
