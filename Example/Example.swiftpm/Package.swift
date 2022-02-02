@@ -42,7 +42,6 @@ let package = Package(
       name: "AppModule",
       dependencies: [
         "PageSheet",
-        .product(name: "PageSheetPlus", package: "PageSheet"),
       ],
       path: "."
     )

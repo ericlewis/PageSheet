@@ -1,5 +1,4 @@
 import PageSheet
-import PageSheetPlus
 import SwiftUI
 
 struct SheetContentView: View {
@@ -98,15 +97,14 @@ struct SheetContentView: View {
       .navigationBarTitleDisplayMode(.inline)
       .interactiveDismissDisabled(dismissDisabled)
       .sheetPreferences {
-        .detents(detents)
-        .grabberVisible(grabberVisible)
-        .selectedDetent(id: selectedDetentId)
-        .largestUndimmedDetent(id: largestUndimmedDetentId)
-        .scrollingExpandsWhenScrolledToEdge(prefersScrollingExpandsWhenScrolledToEdge)
-        .edgeAttachedInCompactHeight(prefersEdgeAttachedInCompactHeight)
-        .widthFollowsPreferredContentSizeWhenEdgeAttached(
-          widthFollowsPreferredContentSizeWhenEdgeAttached)
-        .largestUndimmedDetent(id: largestUndimmedDetentId)
+        .detents(detents);
+        .grabberVisible(grabberVisible);
+        .selectedDetent(id: selectedDetentId);
+        .largestUndimmedDetent(id: largestUndimmedDetentId);
+        .scrollingExpandsWhenScrolledToEdge(prefersScrollingExpandsWhenScrolledToEdge);
+        .edgeAttachedInCompactHeight(prefersEdgeAttachedInCompactHeight);
+        .widthFollowsPreferredContentSizeWhenEdgeAttached(widthFollowsPreferredContentSizeWhenEdgeAttached);
+        .largestUndimmedDetent(id: largestUndimmedDetentId);
       }
     }
     .pageSheet(isPresented: $childPresented) {
