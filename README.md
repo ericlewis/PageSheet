@@ -15,7 +15,7 @@
 - Exposes all of the [`UISheetPresentationController`](https://developer.apple.com/documentation/uikit/uisheetpresentationcontroller) configuration options.
 - Track the currently selected detent using an [`Environment`](https://developer.apple.com/documentation/swiftui/environment) value. 
 - [Well documented API](#documentation), following a similar approach to the Developer Documentation.
-- Small footprint, weighing only [`~38.1kB`](https://www.emergetools.com/) when installed via SwiftPM.
+- Small footprint, weighing only [`~44kB`](https://www.emergetools.com/) when installed via SwiftPM.
 
 ## Table of Contents
 * [Requirements](#requirements)
