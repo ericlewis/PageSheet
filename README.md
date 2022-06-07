@@ -9,7 +9,7 @@
 ### Features
 - Uses the default [`sheet`](https://developer.apple.com/documentation/swiftui/view/sheet(ispresented:ondismiss:content:)) API under the hood, ensuring maximum compatibility & stability.
 - Exposes the *exact same* API as the default SwiftUI [`sheet`](https://developer.apple.com/documentation/swiftui/view/sheet(ispresented:ondismiss:content:)) implementation.
-- No hacks, follows the best practices for creating represetable views in SwiftUI.
+- No hacks, follows the best practices for creating representable views in SwiftUI.
 - Configurable using view modifiers, can configure [`UISheetPresentationController`](https://developer.apple.com/documentation/uikit/uisheetpresentationcontroller)
   from any child views in the presented sheet's content view.
 - Works with the [`interactiveDismissDisabled(_:Bool)`](https://developer.apple.com/documentation/swiftui/view/interactivedismissdisabled(_:)) modifier.
