@@ -10,6 +10,36 @@ extension AutomaticPreferenceKey {
   }
 }
 
+// MARK: - NamespacedAutomaticPreferenceKey
+
+private struct NamespacedAutomaticPreferenceKey<ID: Hashable, WrappedValue: PreferenceKey>: PreferenceKey {
+  static var defaultValue: [ID: WrappedValue.Value] { [:] }
+
+  static func reduce(value existingDictionary: inout [ID: WrappedValue.Value], nextValue: () -> [ID: WrappedValue.Value]) {
+    let newValue = nextValue()
+    for (key, value) in newValue {
+      if var existingValue = existingDictionary[key] {
+        WrappedValue.reduce(value: &existingValue, nextValue: { value })
+        existingDictionary[key] = existingValue
+      } else {
+        existingDictionary[key] = value
+      }
+    }
+  }
+}
+
+extension View {
+  func preference<ID: Hashable, K: PreferenceKey>(namespace: ID, key _: K.Type, value: K.Value) -> some View {
+    preference(key: NamespacedAutomaticPreferenceKey<ID, K>.self, value: [namespace: value])
+  }
+
+  func onPreferenceChange<ID: Hashable, K: PreferenceKey>(namespace: ID, key _: K.Type, perform action: @escaping (K.Value) -> Void) -> some View where K.Value: Equatable {
+    onPreferenceChange(NamespacedAutomaticPreferenceKey<ID, K>.self) { newValue in
+      action(newValue[namespace, default: K.defaultValue])
+    }
+  }
+}
+
 // MARK: - PageSheet
 
 /// Customizable sheet presentations in SwiftUI
@@ -35,12 +65,14 @@ public enum PageSheet {
   // MARK: - ConfiguredHostingView
 
   internal struct ConfiguredHostingView<Content: View>: View {
-
     @State
     private var configuration: Configuration = .default
 
     @State
     private var selectedDetent: Detent.Identifier?
+
+    @Namespace
+    private var namespace
 
     let content: Content
 
@@ -49,32 +81,33 @@ public enum PageSheet {
         .onChange(of: selectedDetent) { newValue in
           self.configuration.selectedDetentIdentifier = newValue
         }
-        .onPreferenceChange(Preference.SelectedDetentIdentifier.self) { newValue in
+        .onPreferenceChange(namespace: namespace, key: Preference.SelectedDetentIdentifier.self) { newValue in
           self.selectedDetent = newValue
         }
-        .onPreferenceChange(Preference.GrabberVisible.self) { newValue in
+        .onPreferenceChange(namespace: namespace, key: Preference.GrabberVisible.self) { newValue in
           self.configuration.prefersGrabberVisible = newValue
         }
-        .onPreferenceChange(Preference.Detents.self) { newValue in
+        .onPreferenceChange(namespace: namespace, key: Preference.Detents.self) { newValue in
           self.configuration.detents = newValue
         }
-        .onPreferenceChange(Preference.LargestUndimmedDetentIdentifier.self) { newValue in
+        .onPreferenceChange(namespace: namespace, key: Preference.LargestUndimmedDetentIdentifier.self) { newValue in
           self.configuration.largestUndimmedDetentIdentifier = newValue
         }
-        .onPreferenceChange(Preference.EdgeAttachedInCompactHeight.self) { newValue in
+        .onPreferenceChange(namespace: namespace, key: Preference.EdgeAttachedInCompactHeight.self) { newValue in
           self.configuration.prefersEdgeAttachedInCompactHeight = newValue
         }
-        .onPreferenceChange(Preference.WidthFollowsPreferredContentSizeWhenEdgeAttached.self) {
+        .onPreferenceChange(namespace: namespace, key: Preference.WidthFollowsPreferredContentSizeWhenEdgeAttached.self) {
           newValue in
           self.configuration.widthFollowsPreferredContentSizeWhenEdgeAttached = newValue
         }
-        .onPreferenceChange(Preference.ScrollingExpandsWhenScrolledToEdge.self) { newValue in
+        .onPreferenceChange(namespace: namespace, key: Preference.ScrollingExpandsWhenScrolledToEdge.self) { newValue in
           self.configuration.prefersScrollingExpandsWhenScrolledToEdge = newValue
         }
-        .onPreferenceChange(Preference.CornerRadius.self) { newValue in
+        .onPreferenceChange(namespace: namespace, key: Preference.CornerRadius.self) { newValue in
           self.configuration.preferredCornerRadius = newValue
         }
         .environment(\._selectedDetentIdentifier, self.selectedDetent)
+        .environment(\._preferenceNamespace, namespace)
         .ignoresSafeArea()
     }
   }
@@ -86,12 +119,12 @@ public enum PageSheet {
   {
     var configuration: Configuration = .default {
       didSet {
-        if let sheet = self.sheetPresentationController {
+        if let sheet = sheetPresentationController {
           if sheet.delegate == nil {
             sheet.delegate = self
           }
 
-          let config = self.configuration
+          let config = configuration
           sheet.animateChanges {
             sheet.prefersGrabberVisible = config.prefersGrabberVisible
             sheet.detents = config.detents
@@ -112,11 +145,12 @@ public enum PageSheet {
     var selectedDetent: Detent.Identifier?
 
     init(rootView: Content, selectedDetent: Binding<Detent.Identifier?>) {
-      self._selectedDetent = selectedDetent
+      _selectedDetent = selectedDetent
       super.init(rootView: rootView)
     }
 
-    @MainActor @objc required dynamic init?(coder aDecoder: NSCoder) {
+    @available(*, unavailable)
+    @MainActor @objc dynamic required init?(coder _: NSCoder) {
       fatalError("init(coder:) has not been implemented")
     }
 
@@ -124,7 +158,7 @@ public enum PageSheet {
       super.viewWillDisappear(animated)
 
       // NOTE: Fixes an issue with largestUndimmedDetentIdentifier perpetually dimming buttons.
-      self.parent?.presentingViewController?.view.tintAdjustmentMode = .normal
+      parent?.presentingViewController?.view.tintAdjustmentMode = .normal
     }
 
     // MARK: UISheetPresentationControllerDelegate
@@ -132,7 +166,7 @@ public enum PageSheet {
     func sheetPresentationControllerDidChangeSelectedDetentIdentifier(
       _ sheet: UISheetPresentationController
     ) {
-      self.selectedDetent = sheet.selectedDetentIdentifier
+      selectedDetent = sheet.selectedDetentIdentifier
     }
   }
 
@@ -150,14 +184,14 @@ public enum PageSheet {
 
     let content: Content
 
-    func makeUIViewController(context: Context) -> HostingController<Content> {
+    func makeUIViewController(context _: Context) -> HostingController<Content> {
       HostingController(
         rootView: content,
         selectedDetent: $selectedDetent
       )
     }
 
-    func updateUIViewController(_ controller: HostingController<Content>, context: Context) {
+    func updateUIViewController(_ controller: HostingController<Content>, context _: Context) {
       if controller.configuration != configuration, configuration != .default {
         controller.configuration = configuration
         controller.rootView = content
@@ -179,13 +213,10 @@ public enum PageSheet {
 // MARK: - Presentation View Modifiers
 
 extension PageSheet {
-
-  internal enum Modifier {
-
+  enum Modifier {
     // MARK: Presentation
 
     struct BooleanPresentation<SheetContent: View>: ViewModifier {
-
       @Binding
       var isPresented: Bool
 
@@ -204,7 +235,6 @@ extension PageSheet {
     // MARK: ItemPresentation
 
     struct ItemPresentation<Item: Identifiable, SheetContent: View>: ViewModifier {
-
       @Binding
       var item: Item?
 
@@ -220,14 +250,13 @@ extension PageSheet {
       }
     }
   }
-
 }
 
 // MARK: Preference
 
-extension PageSheet {
+public extension PageSheet {
   /// Implementations of custom [`PreferenceKeys`](https://developer.apple.com/documentation/swiftui/preferencekey).
-  public enum Preference {
+  enum Preference {
     public struct GrabberVisible: AutomaticPreferenceKey {
       public static var defaultValue: Bool = Configuration.default.prefersGrabberVisible
     }
@@ -363,29 +392,33 @@ public struct SheetPreferenceViewModifier: ViewModifier {
   /// Preference to be applied.
   public let preference: SheetPreference
 
+  @Environment(\._preferenceNamespace) private var namespace
+
   /// Gets the current body of the caller.
-  @inlinable public func body(content: Content) -> some View {
-    switch preference {
-    case let .cornerRadius(value):
-      content.preference(key: PageSheet.Preference.CornerRadius.self, value: value)
-    case let .detents(value):
-      content.preference(key: PageSheet.Preference.Detents.self, value: value)
-    case let .largestUndimmedDetent(value):
-      content.preference(
-        key: PageSheet.Preference.LargestUndimmedDetentIdentifier.self, value: value)
-    case let .selectedDetent(value):
-      content.preference(key: PageSheet.Preference.SelectedDetentIdentifier.self, value: value)
-    case let .edgeAttachedInCompactHeight(value):
-      content.preference(key: PageSheet.Preference.EdgeAttachedInCompactHeight.self, value: value)
-    case let .widthFollowsPreferredContentSizeWhenEdgeAttached(value):
-      content.preference(
-        key: PageSheet.Preference.WidthFollowsPreferredContentSizeWhenEdgeAttached.self,
-        value: value)
-    case let .grabberVisible(value):
-      content.preference(key: PageSheet.Preference.GrabberVisible.self, value: value)
-    case let .scrollingExpandsWhenScrolledToEdge(value):
-      content.preference(
-        key: PageSheet.Preference.ScrollingExpandsWhenScrolledToEdge.self, value: value)
+  public func body(content: Content) -> some View {
+    if let namespace {
+      switch preference {
+      case let .cornerRadius(value):
+        content.preference(namespace: namespace, key: PageSheet.Preference.CornerRadius.self, value: value)
+      case let .detents(value):
+        content.preference(namespace: namespace, key: PageSheet.Preference.Detents.self, value: value)
+      case let .largestUndimmedDetent(value):
+        content.preference(namespace: namespace,
+          key: PageSheet.Preference.LargestUndimmedDetentIdentifier.self, value: value)
+      case let .selectedDetent(value):
+        content.preference(namespace: namespace, key: PageSheet.Preference.SelectedDetentIdentifier.self, value: value)
+      case let .edgeAttachedInCompactHeight(value):
+        content.preference(namespace: namespace, key: PageSheet.Preference.EdgeAttachedInCompactHeight.self, value: value)
+      case let .widthFollowsPreferredContentSizeWhenEdgeAttached(value):
+        content.preference(namespace: namespace,
+          key: PageSheet.Preference.WidthFollowsPreferredContentSizeWhenEdgeAttached.self,
+          value: value)
+      case let .grabberVisible(value):
+        content.preference(namespace: namespace, key: PageSheet.Preference.GrabberVisible.self, value: value)
+      case let .scrollingExpandsWhenScrolledToEdge(value):
+        content.preference(namespace: namespace,
+          key: PageSheet.Preference.ScrollingExpandsWhenScrolledToEdge.self, value: value)
+      }
     }
   }
 
